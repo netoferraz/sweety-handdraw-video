@@ -1,19 +1,19 @@
-# 声音与收尾硬约束
+# Sound & Ending Hard Constraints
 
-## 配乐默认关闭
+## Background Music Off by Default
 
-生产混音默认只有完整旁白，代码不生成背景音乐。旧 music.wav 即使存在也不会使用。audio.music 省略或 false；只有用户本次明确要求并提供 user_instruction 与 source 时可加入。每个 audio.sound_effects 项必须有 source、start、gain、beat_id、reason，说明必要的剧情作用；不能用循环音效变相铺音乐。素材变动会使构建指纹失效。
+The production mix contains the complete narration only; the code generates no background music. A legacy music.wav is never used even if present. Omit audio.music or set it false; it may be added only when the user explicitly requests it in this session and provides user_instruction and source. Every audio.sound_effects item must carry source, start, gain, beat_id, and reason, stating its necessary dramatic function; looped effects must not be used as disguised music. Asset changes invalidate the build fingerprint.
 
-混音报告记录实际输入轨。无附加音轨时，旁白整体响度处理后直接输出，禁止使用会丢失尾部缓冲的混音链。成片交付必须告知：默认未添加背景音乐；可自行合成，或在发布平台选择配乐。
+The mix report records the actual input tracks. With no extra tracks, the narration is loudness-processed and output directly; mixing chains that would drop the tail buffer are forbidden. Finished-film delivery must state: no background music added by default; you may mix your own or pick music on the publishing platform.
 
-## 完整发音和短收尾
+## Complete Pronunciation and Short Ending
 
-先写完整稿，用户指定的结束语写入 ending.closing_text，必须与全文末尾逐字相同，然后整篇合成。没有请求时不自动加营销口号。追加结束语不能仅作为另一个随意拼上的片尾声音。
+First write the complete script; the user-specified closing goes in ending.closing_text and must match the end of the full text character-for-character. Then synthesize the whole piece. No marketing slogans are auto-added without a request. An appended closing must not become just another casually spliced ending sound.
 
-锁定前看实际尾部波形并用最终音轨核对末句、末字。完整母带至少保留末次可测发声后的0.12秒保护；缺少保护时先判断是否未说完，不能用补静音假装修好被截断的字。词句没说完必须重新生成或在声音阶段修复并核对。
+Before locking, view the actual tail waveform and check the final sentence and final character against the final track. A complete master keeps at least 0.12s of protection after the last measurable voicing; when protection is missing, first judge whether speech is incomplete — never fake-fix a truncated character with padded silence. Unfinished words or sentences require regeneration or repair in the sound stage with re-verification.
 
-audio.end_hold_seconds 默认0.45秒，范围0.2—0.8秒。母带末次可测发声到视频结束的静音总长不得超过1.2秒。只有核对为外侧静音后才能在锁定前缩短尾部；正文的换气、停顿和句尾不得压缩。检测使用10ms RMS、-60dBFS阈值，属于工程边界，不证明朗读或情绪合格。
+audio.end_hold_seconds defaults to 0.45s, range 0.2–0.8s. Total silence from the master's last measurable voicing to the end of the video must not exceed 1.2s. The tail may be shortened before locking only after verifying it is outer silence; body breaths, pauses, and sentence endings must never be compressed. Detection uses 10ms RMS with a -60dBFS threshold — an engineering boundary, not proof of reading or emotional quality.
 
-默认 ending.fade_seconds 为0，保留完成画面到结束。选择渐隐时必须全部发生在母带结束后；避免长时间全白或全黑。最后一句字幕覆盖完整发音，再保留短暂阅读时间。最终片尾同时核对音轨、字幕、手部离场和画面，不能单凭时长相等通过。
+By default ending.fade_seconds is 0, holding the finished frame until the end. When fading is chosen, it must occur entirely after the master ends; avoid long all-white or all-black holds. The final subtitle covers the complete pronunciation, plus a short reading hold. The final ending checks audio track, subtitles, hand exit, and visuals together — passing on equal durations alone is not allowed.
 
-若本地模型总在EOS截掉末字，允许在声音制作阶段增加不进入成片的保护后缀，生成整篇后以实际波形与时间戳定位末句和后缀间的自然停顿，仅去掉后缀。必须重新核对最后一个字与旁白原文，记录生成文本和交付文本的差异；不能在活跃语音中下刀。
+If the local model always truncates the final character at EOS, a protective suffix that never enters the finished film may be added during sound production; after generating the whole piece, locate the natural pause between the final sentence and the suffix via actual waveform and timestamps, and remove only the suffix. The last character must be re-verified against the narration source, recording the difference between generated and delivered text; never cut inside active speech.

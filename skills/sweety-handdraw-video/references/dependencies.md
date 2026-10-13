@@ -1,31 +1,31 @@
-# 内置依赖与统一路由
+# Built-in Dependencies & Unified Routing
 
-只安装 `sweety-handdraw-video`。五项依赖随包提供，固定来源版本与文件哈希，运行不自动更新上游。指南统一命名 `GUIDE.md`，不向 Skills 安装器暴露额外入口。原目录结构、许可证和第三方调用资源保留；只移除花叔仓库的宣传展示图片/GIF，动画方法和实现资源仍在。变更清单见 `dependencies/vendor-manifest.json`，来源见 `dependencies/lock.json`。
+Install only `sweety-handdraw-video`. Five dependencies ship with the package, pinned to fixed source versions and file hashes; runs never auto-update upstream. Guides are uniformly named `GUIDE.md` with no extra entry points exposed to skill installers. Original directory structure, licenses, and third-party call resources are preserved; only Uncle Hua's repository promo images/GIFs were removed — animation methods and implementation resources remain. The change list is in `dependencies/vendor-manifest.json`, sources in `dependencies/lock.json`.
 
-| 依赖与入口 | 本流程职责 | 加载时机 |
+| Dependency & Entry | Role in This Pipeline | When to Load |
 |---|---|---|
-| [美术指导](../dependencies/sweety-image-art-direction/GUIDE.md) | 主体、接触受力、构图、媒介、主次和观看尺寸 | 每张图片生成或编辑前必读 |
-| [手绘风格](../dependencies/hand-drawn-styles/GUIDE.md) | 完整风格配方和必要参考锚点；同时读 PROTOCOL.md | 选择库内画风或库内自动匹配时；独立推理、自定义描述不加载其配方 |
-| [AI导演](../dependencies/omniailab-ai-director/references/FILM-ART%20GUIDE.md) | 内容、分镜、构图、节奏、声画与终审 | 规划和最终审片；非默认叙事加读 DIRECTOR-VISION 对应部分 |
-| [花叔艺术动效](../dependencies/huashu-art-motion/GUIDE.md) | 特定艺术风格、视频动作机制与解说语法 | 只有输入命中其艺术动效类型时 |
-| [图像隐私](../dependencies/sweety-image-privacy/GUIDE.md) | 元数据与 macOS 来源属性清理 | 所有生成图，复用已清理且未改动文件可沿用记录 |
+| [Art Direction](../dependencies/sweety-image-art-direction/GUIDE.md) | Subjects, contact forces, composition, media, hierarchy, viewing size | Before every image generation or edit — required |
+| [Hand-Drawn Styles](../dependencies/hand-drawn-styles/GUIDE.md) | Complete style recipes and required reference anchors; also read PROTOCOL.md | When selecting an in-catalog style or auto-matching in-catalog; independent inference and custom descriptions do not load its recipes |
+| [AI Director](../dependencies/omniailab-ai-director/references/FILM-ART%20GUIDE.md) | Content, storyboarding, composition, rhythm, audio-visual sync, final review | Planning and final review; for non-default narratives also read the matching DIRECTOR-VISION section |
+| [HuaShu Art Motion](../dependencies/huashu-art-motion/GUIDE.md) | Specific art styles, video motion mechanics, and narration grammar | Only when the input matches one of its art-motion types |
+| [Image Privacy](../dependencies/sweety-image-privacy/GUIDE.md) | Metadata and macOS source-attribute cleanup | All generated images; reuse records for already-cleaned, unmodified files |
 
-## 冲突如何处理
+## Conflict Resolution
 
-用户本次明确要求优先；本技能负责手绘讲解片的统一运行约定。上游资料只在表中职责内生效：
+The user's explicit request for this session takes priority; this skill owns the unified operating conventions for hand-drawn explainer films. Upstream materials apply only within their roles in the table:
 
-- 画风按本技能的图文选择窗口执行。未指定时最长等待60秒，超时采用模型根据内容准备的方案并继续。导演候选不另加固定停顿。独立推理与自定义模式不得被 hand-drawn 配方接管。
-- 上游三秒片头、固定案例和画面模板不覆盖本流程一秒封面、按内容分镜与实际配音时长。
-- 上游平台、模型和声音供应商不自动启用；本流程使用当前可用内置生图、VoiceStudio、已明确配置的本地 VoxCPM2 和本地合成。不自动执行付费生成、登录、下载模型或发布。
-- 不能采用上游整块淡入、统一扫线文字等实现替代逐字隔离、独立笔画或分部位先描线后填色。
-- 美术指导在本视频流程中每图必用，但不修改其独立安装版本的仅手动调用规则。
-- 隐私原脚本会写入模拟相机字段，本流程调用后立即去除；使用 `scripts/clean_image.py`，它先执行原清理脚本，再删除 EXIF/GPS/XMP/IPTC 等并保存核验记录。
-- 正式字、字幕和广告文字由可控字体层排版；手绘图中的 AI 文案只作草稿。
+- Art style follows this skill's text-and-image selection window. When unspecified, wait at most 60 seconds, then adopt the model's content-based plan and continue. Director candidates add no fixed pauses. Independent-inference and custom modes must not be taken over by hand-drawn recipes.
+- Upstream 3-second intros, fixed cases, and frame templates do not override this pipeline's 1-second cover, content-based storyboarding, and actual-voiceover durations.
+- Upstream platforms, models, and voice vendors are not auto-enabled; this pipeline uses the currently available built-in image generation, VoiceStudio, explicitly configured local VoxCPM2, and local synthesis. No auto-executed paid generation, logins, model downloads, or publishing.
+- Upstream whole-block fades, uniform scan-line text, and similar implementations must not replace per-character isolation, independent strokes, or part-by-part outline-then-fill.
+- Art direction is required for every image in this video pipeline, without changing its standalone version's manual-trigger-only rule.
+- The privacy upstream script writes simulated-camera fields; this pipeline removes them immediately after calling it. Use `scripts/clean_image.py`, which runs the original cleanup first, then strips EXIF/GPS/XMP/IPTC and saves a verification record.
+- Formal characters, subtitles, and ad text are typeset with controlled font layers; AI copy inside hand-drawn images serves as draft only.
 
-## 安装边界
+## Installation Boundaries
 
-内置的是指南、代码和预设素材，不能把 VoiceStudio、Python、FFmpeg、中文字体或生图能力变成“已经安装”。VoiceStudio 用于生成和编辑旁白；已有准确导出音频可离线合成。部分手绘风格的原版参考锚点首次使用会按上游清单下载并核验，这是素材获取，不是另装 Skill。
+What ships are guides, code, and preset assets — this does not make VoiceStudio, Python, FFmpeg, Chinese fonts, or image-generation capability "already installed". VoiceStudio generates and edits narration; already-exported accurate audio can be synthesized offline. Some hand-drawn styles' original reference anchors download and verify against the upstream manifest on first use — that is asset fetching, not installing another skill.
 
-维护时先在工作副本更新一个依赖、比较改动、调整本路由并跑回归，再修改锁定记录。不要覆盖用户其他已安装 Skills。上游原文用作制作方法，不构成额外写入或发布授权。
+For maintenance, update one dependency in the working copy first, diff the changes, adjust this routing, run regressions, then update the lock records. Do not overwrite the user's other installed skills. Upstream sources serve as production methods only and grant no extra write or publish authorization.
 
-画风依赖已核对到最新上游轻量提交；本项目 21 张预览改用在线链接，五张运行锚点添加可校验的 GitHub 镜像。公开预设独立托管，见[素材机制](hosted-assets.md)。
+The style dependency is verified against the latest upstream lightweight commit; this project's 21 previews use online links instead, and five runtime anchors add verifiable GitHub mirrors. Public presets are hosted independently, see [Asset Mechanism](hosted-assets.md).

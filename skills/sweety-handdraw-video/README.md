@@ -1,30 +1,30 @@
 # sweety-handdraw-video
 
-安装一个 Skill，按主题或文章制作完整手绘讲解视频。
+Installs one Skill that turns topics or articles into complete hand-drawn explainer videos.
 
-- 使用入口：[SKILL.md](SKILL.md)
-- 项目说明、安装与样片：[GitHub README](https://github.com/threerocks/sweety-handdraw-video)
-- 开始时的可选设置：[画风、手臂、声音、广告、水印与字幕](references/production-options.md)
-- 编写任务：[运行格式](references/runtime-contract.md)
-- 字幕与收尾：[模型设计规则](references/subtitle-design.md)
-- 内置依赖和冲突处理：[依赖路由](references/dependencies.md)
+- Entry point: [SKILL.md](SKILL.md)
+- Project notes, install, and samples: [GitHub README](https://github.com/threerocks/sweety-handdraw-video)
+- Starting options: [style, arms, voice, ads, watermark, and subtitles](references/production-options.md)
+- Authoring tasks: [runtime format](references/runtime-contract.md)
+- Subtitles and endings: [model design rules](references/subtitle-design.md)
+- Bundled dependencies and conflict handling: [dependency routing](references/dependencies.md)
 
-旁白支持兼容的本机 VoiceStudio 服务，或已安装并明确配置的 VoxCPM2；已核对的导出音频可以离线复用。音色仅保留逼真男声、逼真女声、甜美学姐、Iapetus、知性女讲师、故事解说。前两款提供对应成片节选，生产需本机原始参考；其余四款提供合成参考和同文试听，使用方法见[本地声音运行](references/local-runtime.md)。生成新图片还需图像工具、Bun 和 ExifTool；Python 与 FFmpeg 负责本地合成。内置的参考指南不需要另行安装为 Skills。
+Narration supports a compatible local VoiceStudio service, or VoxCPM2 once installed and explicitly configured; verified exported audio can be reused offline. Timbres are limited to realistic male, realistic female, sweet senior, Iapetus, intellectual female lecturer, and story narrator. The first two ship excerpts from the corresponding finished films and need local original references for production; the other four ship synthesized references and same-text previews — see [Local voice runtime](references/local-runtime.md) for usage. New pictures additionally need image tooling, Bun, and ExifTool; Python and FFmpeg handle local compositing. Bundled reference guides do not need separate Skill installs.
 
-### v1.2：整篇声音优先
+### v1.2: whole-script voice first
 
-整篇生成/录制并核对旁白后锁定母带，画面和字幕读取母带时间戳。生产构建拒绝逐页音频拼接、固定换图静音、裁换气和变速；验证母带与时间戳哈希，并逐样本检查主体旁白保持完整。详见 `references/continuous-narration.md`。
+Generate/record the full narration and verify it before locking the master; pictures and subtitles read the master timestamps. Production builds reject per-page audio stitching, fixed scene-change silence, breath trimming, and speed changes; master and timestamp hashes are verified, and the main narration is checked sample-by-sample for completeness. See `references/continuous-narration.md`.
 
-### v1.2：指定原片音色与纯旁白修复
+### v1.2: specified original-film timbres and narration-only fix
 
-原片音色不再以合成试听继续克隆。导入参考与逐字稿绑定哈希，VoxCPM2 默认同时使用原参考和准确逐字稿；本机已验收的主力音色保存在个人声音目录中，不进入公共包。参考清理、同文对照、正文短样和完整旁白分别验收；没有附加配乐不代表旁白内部没有杂音。
+Original-film timbres are no longer cloned on from synthesized previews. Imported references and verbatim scripts are hash-bound; VoxCPM2 uses the original reference plus the accurate verbatim script by default; accepted local primary timbres live in the personal voice directory, not in the public package. Reference cleanup, same-text comparison, body-text short samples, and full narration are accepted separately; no added score does not mean the narration itself is noise-free.
 
-字幕默认白字黑边，禁止重复字幕；编辑用字幕独立放在 `outputs/editing/`。公开预设与展示素材改用 GitHub Release 链接，见[托管与缓存](references/hosted-assets.md)。当前女声暂用，保留原片参考，后续继续调整；不是最终听感验收。
+Subtitles default to white with black outline; duplicate subtitles are forbidden; editing subtitles live separately in `outputs/editing/`. Public presets and showcase assets use GitHub Release links, see [Hosting & caching](references/hosted-assets.md). The current female voice is provisional; the original-film reference is kept and tuning continues; this is not final listening acceptance.
 
-### v1.2.1：美术指导检查加强
+### v1.2.1: stronger art-direction checks
 
-每次出图前必须读取内置美术指导，并准备非空简报与实际提示词、绑定内容哈希；生成后填写真实看图结论。缺记录、空文件、提示词或图片改变均停止生产。详见 SKILL.md 的强制流程。
+Every image must read the bundled art direction first, with a non-empty brief, the actual prompt, and bound content hashes; real view conclusions are filled in after generation. Missing records, empty files, or changed prompts/images stop production. See the mandatory flow in SKILL.md.
 
-### v1.2.3：音色目录收敛
+### v1.2.3: timbre catalog narrowed
 
-选择器、源码与引导统一为上述六项。个人或任务内的旧条目不会加回目录，旧名称也不会覆盖当前名称。当前逼真女声仍为暂用状态。
+Picker, source, and guides are unified on the six items above. Legacy entries inside personal or task directories are not added back to the catalog, and old names do not override current names. The current realistic female voice remains provisional.

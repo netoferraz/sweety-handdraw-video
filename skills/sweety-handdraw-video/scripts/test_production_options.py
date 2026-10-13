@@ -20,7 +20,7 @@ class ProductionOptionsTests(unittest.TestCase):
         self.catalog = {'styles':[{'id':'1'}]}
         self.hands = [{'id':'navy'},{'id':'pen-only'}]
         self.voices = [{'id':'iapetus','available':True},{'id':'external','available':False}]
-        self.defaults = {'content':'解释愤怒如何伤害自己','style':{'mode':'inferred'},'hand':{'preset':'navy'},
+        self.defaults = {'content':'Explain how anger harms oneself','style':{'mode':'inferred'},'hand':{'preset':'navy'},
             'voice':{'voice':'iapetus'},'advertising':{'text':''},'watermark':{'text':''},'captions':{'mode':'quiet'}}
 
     def tearDown(self): self.temporary.cleanup()
@@ -40,46 +40,46 @@ class ProductionOptionsTests(unittest.TestCase):
         self.assertEqual(persisted['choices']['watermark']['value']['text'],'')
 
     def test_explicit_preferences_skip_wait_and_survive_other_timeouts(self):
-        session=self.session({'hand':{'preset':'pen-only'},'watermark':{'text':'版权所有：作者'}})
+        session=self.session({'hand':{'preset':'pen-only'},'watermark':{'text':'Copyright: the author'}})
         self.assertEqual(session.advance(60)['stage'],'voice')
         session.choose('voice',{'voice':'iapetus'},now=61)
         self.assertEqual(session.advance(120)['stage'],'advertising')
         self.assertEqual(session.advance(121)['stage'],'captions')
         self.assertTrue(session.advance(181)['complete'])
         self.assertEqual(session.choices['hand']['value']['preset'],'pen-only')
-        self.assertEqual(session.choices['watermark']['value']['text'],'版权所有：作者')
+        self.assertEqual(session.choices['watermark']['value']['text'],'Copyright: the author')
 
     def test_missing_content_is_rejected_and_sixteen_characters_are_preserved(self):
         self.defaults['content']=' '
         with self.assertRaisesRegex(ValueError,'MISSING_CONTENT'): self.session()
-        for label in ['甲'*16, '😀'*16]:
+        for label in ['A'*16, '😀'*16]:
             self.assertIsNone(validate_choice('advertising',{'text':label},self.catalog,self.hands,self.voices))
         with self.assertRaises(ValueError):
-            validate_choice('advertising',{'text':'甲'*17},self.catalog,self.hands,self.voices)
+            validate_choice('advertising',{'text':'A'*17},self.catalog,self.hands,self.voices)
         with self.assertRaises(ValueError):
             validate_choice('voice',{'voice':'external'},self.catalog,self.hands,self.voices)
 
     def test_applied_choices_control_real_manifest_layers(self):
-        session=self.session({'hand':{'preset':'pen-only'},'advertising':{'text':'完整品牌名称'},'watermark':{'text':'版权署名'},'captions':{'mode':'plate'}})
+        session=self.session({'hand':{'preset':'pen-only'},'advertising':{'text':'Full Brand Name'},'watermark':{'text':'Credit Name'},'captions':{'mode':'plate'}})
         session.advance(120)
         (self.root/'job.json').write_text(json.dumps({'version':1,'hand':{'source':'old-hand.png'},'pages':[]}))
         job=apply_choices(self.root)
-        self.assertEqual(job['hand'],{'preset':'pen-only','pen_text':'完整品牌名称'})
-        self.assertEqual(job['watermark']['text'],'版权署名')
+        self.assertEqual(job['hand'],{'preset':'pen-only','pen_text':'Full Brand Name'})
+        self.assertEqual(job['watermark']['text'],'Credit Name')
         self.assertEqual(job['captions']['color'],'#FFFFFF')
         self.assertNotIn('source',job['hand'])
 
     def test_pen_only_does_not_require_a_forearm_and_label_limit_is_enforced(self):
         font_path,font_index=find_font({})
-        hand=prepare_hand({'preset':'pen-only','pen_text':'手绘口播Skill'},self.root,self.root,1080,font_path,font_index)
+        hand=prepare_hand({'preset':'pen-only','pen_text':'Handdraw Skill'},self.root,self.root,1080,font_path,font_index)
         self.assertEqual(hand['kind'],'pen')
         self.assertTrue(validate_timeline({'cover_seconds':1,'canvas':{'height':1080},'hand':hand,'pages':[]}))
         with self.assertRaisesRegex(ValueError,'16'):
-            prepare_hand({'preset':'pen-only','pen_text':'甲'*17},self.root,self.root,1080,font_path,font_index)
+            prepare_hand({'preset':'pen-only','pen_text':'A'*17},self.root,self.root,1080,font_path,font_index)
 
     def test_optional_watermark_drift_is_visible_quiet_and_stays_in_frame(self):
         self.assertIsNone(prepare_watermark({},self.root,1920,1080))
-        text='『手绘口播.Skill』今晚 18:00 全网首发。\n版权所有：@leo_xiaolei'
+        text='Handdraw Voice.Skill premieres tonight at 18:00.\nCopyright: @leo_xiaolei'
         mark=prepare_watermark({'text':text},self.root,1920,1080)
         self.assertEqual(mark['text'],text)
         alpha=np.array(Image.open(mark['source']))[:,:,3]
@@ -91,7 +91,7 @@ class ProductionOptionsTests(unittest.TestCase):
             self.assertLessEqual(x+mark['width'],1920);self.assertLessEqual(y+mark['height'],1080)
 
     def test_caption_plate_is_an_explicit_supported_choice(self):
-        metadata=build_caption(self.root,'caption','完整字幕',{'background':{'color':'#243039','opacity':.76},'color':'#FFFFFF'},1920,1080)
+        metadata=build_caption(self.root,'caption','Complete caption',{'background':{'color':'#243039','opacity':.76},'color':'#FFFFFF'},1920,1080)
         alpha=np.array(Image.open(self.root/'caption.png'))[:,:,3]
         self.assertTrue((alpha==194).any())
         self.assertEqual(metadata['background']['color'],'#243039')

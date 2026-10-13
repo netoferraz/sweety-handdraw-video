@@ -98,7 +98,7 @@ def main():
         response.raise_for_status()
         engine=response.json()
     except requests.RequestException as error:
-        raise SystemExit('VoiceStudio 未安装、未启动或服务不可达：本任务没有旁白，不会交付无声视频冒充完整成片。请安装并启动 VoiceStudio，或在 VoiceStudio 编辑后导出旁白。') from error
+        raise SystemExit('VoiceStudio is not installed, not running, or unreachable: this job has no narration and will not deliver a silent video as a finished film. Install and start VoiceStudio, or edit in VoiceStudio and export the narration.') from error
     backend = options.get('backend', 'mlx-audio')
     expected_model = options.get('model', 'mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16')
     if engine.get('active') != backend or engine.get('active_model') != expected_model:

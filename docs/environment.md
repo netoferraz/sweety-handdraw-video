@@ -1,53 +1,55 @@
-# 环境检查表
+# Environment checklist
 
-适用本地 v1.2。安装 Skill、安装 Python 渲染依赖、准备图像生成能力、部署声音模型是不同步骤。
+Applies to local v1.2. Installing the Skill, installing Python rendering dependencies, preparing image-generation capability, and deploying voice models are separate steps.
 
-## 制作前让 Agent 逐项检查
+## Have the agent check these item by item before production
 
 ```text
-检查 sweety-handdraw-video 的当前版本和完整目录。
-检查 Python、FFmpeg/ffprobe、中文手写字体、字幕字体、Bun、ExifTool。
-确认本任务能调用图像生成。
-确认一条真实可用的配音路径：本地 VoxCPM2、兼容 VoiceStudio，
-或我提供的完整旁白和时间戳。
-先报告缺失项与实际可用路径，不自动下载大模型，不购买服务。
-环境通过后，使用我的内容先做一个代表场景，再完成视频。
+Check the current version and full directory of sweety-handdraw-video.
+Check Python, FFmpeg/ffprobe, Chinese handwriting font, subtitle font, Bun, ExifTool.
+Confirm image generation is callable for this task.
+Confirm one genuinely working voiceover path: local VoxCPM2, compatible VoiceStudio,
+or the full narration and timestamps I provide.
+Report missing items and the actually available path first; do not auto-download
+large models, do not buy services.
+After the environment passes, build one representative scene from my content first,
+then complete the video.
 ```
 
-## 各部分分别需要什么
+## What each part needs
 
-| 部分 | 依赖 | 不是这一步提供的东西 |
+| Part | Depends on | Not provided by this step |
 |---|---|---|
-| Skill 安装 | 安装器，或手动复制完整目录 | 不包含 Agent 订阅、生图权限或 TTS 模型权重 |
-| 本地渲染 | Python 3.9+；Pillow / NumPy / SciPy / requests；FFmpeg/ffprobe | 不负责替你开通模型服务 |
-| 文字 | 手写中文字体与常规字幕字体 | 系统商业字体不随包分发 |
-| 图像隐私 | Bun、ExifTool、内置清理脚本 | 清理元数据不保证通过 AI 图片检测 |
-| VoxCPM2 适配器 | 当前为 Apple Silicon / MLX 路径；已安装模型 | 不能直接当成 CUDA / Windows 的部署教程 |
-| VoiceStudio 适配器 | 兼容的本机 HTTP API 与已配置模型 | 同名桌面软件不必然兼容 |
-| 现成旁白 | 已检查的音频、全文与时间戳 | 没有时间戳时，仍须完成对齐 |
-| 可选声音清理 | 已安装的人声分离 / 降噪模型 | 不保证不损伤音色，需要前后试听 |
+| Skill install | Installer, or manual copy of the full directory | Does not include agent subscription, image-generation rights, or TTS model weights |
+| Local rendering | Python 3.9+; Pillow / NumPy / SciPy / requests; FFmpeg/ffprobe | Does not provision model services for you |
+| Text | Handwritten Chinese font and regular subtitle font | System commercial fonts are not bundled |
+| Image privacy | Bun, ExifTool, bundled cleanup script | Cleaning metadata does not guarantee passing AI-image detection |
+| VoxCPM2 adapter | Currently the Apple Silicon / MLX path; installed model | Cannot be used directly as a CUDA / Windows deployment guide |
+| VoiceStudio adapter | Compatible local HTTP API with configured model | Same-named desktop software is not necessarily compatible |
+| Ready-made narration | Checked audio, full text, and timestamps | Without timestamps, alignment must still be done |
+| Optional voice cleanup | Installed vocal-separation / denoise models | No guarantee timbre is undamaged; listen before and after |
 
-## 硬件与支持状态
+## Hardware and support status
 
-- 完整样片制作环境：作者的 M3 Max、36GB 内存、macOS、Codex、本地声音工具。
-- VoxCPM2-8bit 权重约 3.23GB；这不是最低内存。8GB / 16GB 机器未在本项目中完成最低配置测试。
-- Linux 仅有 v1.0.0 的 CI / 短片渲染验证，不等于 v1.2 的 MLX 配音验证。
-- Windows、其他 Agent、其他 VoiceStudio 后端暂未完成相同的整流程测试。
-- 已有图片、核对后的声音与时间戳，可以减少生成步骤；能否完全离线取决于这些输入是否齐全。
+- Full sample production environment: author's M3 Max, 36GB RAM, macOS, Codex, local voice tooling.
+- VoxCPM2-8bit weights are about 3.23GB; that is not minimum RAM. 8GB / 16GB machines have not completed minimum-config testing in this project.
+- Linux has only v1.0.0 CI / short-film render verification, which does not equal v1.2 MLX voiceover verification.
+- Windows, other agents, and other VoiceStudio backends have not completed the same end-to-end testing.
+- Existing pictures, verified voice, and timestamps can reduce generation steps; whether fully offline works depends on whether these inputs are complete.
 
-## 常见卡点
+## Common blockers
 
-| 现象 | 优先检查 |
+| Symptom | Check first |
 |---|---|
-| 能写脚本，不能出图 | 宿主是否真的有可用的图像生成能力 |
-| VoiceStudio 连接失败 | 本机服务是否运行，端口和接口是否匹配 |
-| VoxCPM2 import 失败 | 是否使用装有 MLX / mlx-audio 的专用 Python，而不是渲染虚拟环境 |
-| 中文方框或裁字 | 字体是否存在、字形是否覆盖、布局是否重新检查 |
-| 声音尾句缺失 | 完整母带是否漏读，不能只延长静帧掩盖缺字 |
-| 没配乐仍有杂音 | 检查原始参考与生成旁白本身，而不只查混音配置 |
-| 指定片尾声音不可选 | 是否导入了真实原片及准确逐字稿，不能拿旧试听代替 |
-| 安装后选项较少 | 检查 VERSION；公开旧包不包含本地未发布改动 |
+| Can write scripts, cannot produce pictures | Whether the host really has working image-generation capability |
+| VoiceStudio connection fails | Whether the local service runs, and port and endpoints match |
+| VoxCPM2 import fails | Whether you use the dedicated Python with MLX / mlx-audio, not the render venv |
+| Chinese boxes or clipped glyphs | Whether fonts exist, glyph coverage fits, and layout was re-checked |
+| Missing closing narration | Whether the full master skipped reads; do not mask missing words by stretching still frames |
+| Noise despite no music | Check the original reference and generated narration themselves, not just the mix config |
+| Specified ending voice not selectable | Whether the real original film and accurate verbatim script were imported; old previews cannot stand in |
+| Fewer options after install | Check VERSION; public older packages exclude unpublished local changes |
 
-详细 API、参数与导入命令见 [本地运行环境](../skills/sweety-handdraw-video/references/local-runtime.md)。
+See [Local runtime](../skills/sweety-handdraw-video/references/local-runtime.md) for detailed APIs, parameters, and import commands.
 
-公开预设首次访问需要 GitHub 下载网络，之后可使用校验通过的本地缓存。女声听感暂未最终验收；原片录音保留在作者本地。
+Public presets need GitHub download access on first use, then verified local caches can be used. Female-voice perceived quality has not passed final acceptance; the original recording stays on the author's local machine.

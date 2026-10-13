@@ -1,15 +1,15 @@
-# 运行格式与命令
+# Runtime Format & Commands
 
-任务目录包含 `job.json`、模型编写的 `design.json`、`design/art-direction.json`、`inputs/`、`work/` 和 `outputs/`。`review.json` 由 verify 初始化，执行者实际检查后填写。脚本不代替模型写内容、选路线或设计素材。
+Task directories contain `job.json`, model-authored `design.json`, `design/art-direction.json`, `inputs/`, `work/`, and `outputs/`. `review.json` is initialized by verify and filled in by whoever actually reviews. Scripts never write content, pick routes, or design assets for the model.
 
-## 最小字段示例
+## Minimal Field Example
 
-以下只是格式说明；须先生成、检查、清理图片，写入有效美术记录并锁定完整旁白和时间戳后才能运行。
+Format illustration only; runnable only after images are generated, checked, cleaned, valid art records are written, and the complete narration plus timestamps are locked.
 
 ```json
 {
   "version": 1,
-  "title": "本次主题",
+  "title": "This session's theme",
   "design_file": "design.json",
   "art_direction": {"record": "design/art-direction.json"},
   "canvas": {"width": 1920, "height": 1080, "fps": 30},
@@ -20,9 +20,9 @@
   "audio": {"end_hold_seconds": 0.45},
   "pages": [{"beats": [{
     "id": "opening",
-    "text": "与音频逐字对应的讲解。",
+    "text": "Narration matching the audio character-for-character.",
     "actions": [
-      {"type": "text", "text": "本段短标题", "x": 120, "y": 60, "size": 80},
+      {"type": "text", "text": "This segment's short title", "x": 120, "y": 60, "size": 80},
       {"type": "illustration", "source": "inputs/object.png", "x": 200, "y": 230,
        "width": 680, "height": 580, "weight": 3,
        "parts": [{"id": "single_object", "polygon": [[0,0],[1,0],[1,1],[0,1]]}]}
@@ -31,58 +31,58 @@
 }
 ```
 
-单一部位示例只适用于一个简单物体。人物必须根据实际图像划出头、颈、躯干、左右臂、下半身等有语义的部位，不能用整图一个矩形敷衍。
+The single-part example suits one simple object only. People must be split into semantic parts from the actual image — head, neck, torso, arms, lower body — never glossed over with one whole-image rectangle.
 
-## 设计和图片记录
+## Design and Image Records
 
-`design.json` 必须有 `narrative_route.decision/reason/director_review`。默认路线 decision 为 `default_life_concept`；其他路线还要有 `director_plan`，记录 omniailab 的具体导演规划。完整内容字段见 [创作与分镜](story-design.md)。
+`design.json` must carry `narrative_route.decision/reason/director_review`. The default route decision is `default_life_concept`; other routes additionally carry `director_plan` with the omniailab-specific directing plan. Full content fields: see [Story & Storyboard](story-design.md).
 
-美术记录格式：
+Art record format:
 
 ```json
 {
-  "dependency_sha256": "随包美术指导 GUIDE.md 的实际 SHA-256",
+  "dependency_sha256": "actual SHA-256 of the packaged art-direction GUIDE.md",
   "images": [{
     "source": "../inputs/object.png",
-    "sha256": "清理后文件的实际 SHA-256",
+    "sha256": "actual SHA-256 of the cleaned file",
     "method": "generated_under_guidance",
     "brief_file": "briefs/object.md",
-    "brief_sha256": "出图前简报文件的实际 SHA-256",
+    "brief_sha256": "actual SHA-256 of the pre-generation brief file",
     "prompt_file": "prompts/object.txt",
-    "prompt_sha256": "本次实际完整提示词文件的 SHA-256",
+    "prompt_sha256": "SHA-256 of the actual complete prompt file used this time",
     "status": "pass",
-    "evidence": "实际查看后的主体、接触、构图、边缘和可绘制性判断"
+    "evidence": "Subject, contact, composition, edges, and drawability judged after actual viewing"
   }]
 }
 ```
 
-所有路径相对记录文件。封面、正文源图、自定义手均要覆盖；包内六款手有自己的记录。合成封面 method 为 `composed_with_verified_layers`，保存可编辑文字图层说明。图集用 `approved_crops` 数组列出已查看的像素裁切，每项是 `[left,top,right,bottom]`；未批准格子不能参与成片。更换图像后旧哈希失效，必须重新检查。提示词文件存在不是“指导已经执行”的充分证据。
+All paths are relative to the record file. Covers, body source images, and custom hands are all covered; the six packaged hands carry their own records. Composited covers use method `composed_with_verified_layers` with editable text-layer notes. Atlases list approved pixel crops in an `approved_crops` array, each `[left,top,right,bottom]`; unapproved cells must not enter the finished film. Replaced images invalidate old hashes and require re-review. A prompt file's existence is not sufficient evidence that "guidance was followed".
 
-## 绘制和时序
+## Drawing and Timing
 
-- `text`：`text/x/y/size/color/weight`，一行一项。每个字形在独立区域内描线，后字不会提前露出。默认近似字形路径，不保证规范书法笔顺。图层按各字真实边界计算，并保留至少5px空白；禁止用字号估算高度。
-- `marker`：`style` 为 `highlight/underline/circle/box`，使用 `width/height/color/line_width`。
-- `illustration`：`source/x/y/width/height`，可设像素裁切 `crop`。保持比例缩入框。
-- `parts`：有序数组，唯一 `id` 与归一化 `polygon` 坐标。坐标相对裁切后的图。区域重叠时先声明者拥有像素；所有可见像素必须有归属。模型看图后确定边界，避免切碎手指、轮廓或道具。轮廓按数组顺序完成全部部位，再按同一顺序填色。笔划间抬笔。
-- 前景手臂、持物或其他遮挡可用 `exclude_polygons` 给出归一化排除多边形数组；从头部或躯干排除的像素必须由后续正确部位接管。不要因为手臂横过胸前就让它在躯干阶段提前显现。
-- 复杂遮挡可用部位的 `exclude_hsv:[[hue_min,hue_max,saturation_min,value_min]]` 排除透过发丝等空隙可见的背景颜色（色相0—360，饱和度/亮度0—1）。排除的像素必须由后续正确部位接管，需实际看图验证，不能仅以颜色自动推断语义。
-- `weight` 只分配对应音频窗口里的绘制时间，不是秒数。所有元素可设 `z`；底纹默认位于文字下面。
+- `text`: `text/x/y/size/color/weight`, one entry per line. Each glyph is traced in its own region; later characters never show early. Default: approximate glyph paths, standard calligraphic stroke order not guaranteed. Layers derive from each character's true bounds with at least 5px padding; never estimate height from font size.
+- `marker`: `style` is `highlight/underline/circle/box`, using `width/height/color/line_width`.
+- `illustration`: `source/x/y/width/height`, optional pixel `crop`. Aspect-fit into the box.
+- `parts`: ordered array with unique `id` and normalized `polygon` coordinates. Coordinates are relative to the cropped image. On overlap, the earlier declaration owns the pixels; every visible pixel must have an owner. The model sets bounds after viewing the image, avoiding chopped fingers, outlines, or props. Complete all parts' outlines in array order, then fill in the same order. Pen lifts between strokes.
+- Foreground arms, held objects, or other occluders may declare normalized exclusion polygon arrays via `exclude_polygons`; pixels excluded from head or torso must be picked up by the correct later part. An arm crossing the chest must not appear early during the torso phase.
+- Complex occlusion may use a part's `exclude_hsv:[[hue_min,hue_max,saturation_min,value_min]]` to exclude background colors visible through gaps such as hair strands (hue 0–360, saturation/value 0–1). Excluded pixels must be picked up by the correct later part, verified by actual viewing — never infer semantics from color alone.
+- `weight` only allocates drawing time within the matching audio window, not seconds. All elements may set `z`; base textures default below text.
 
-跨多句的一个完整画面可以使用页面 `visual_groups`，每组为 `{"start_beat":0,"end_beat":2,"lead":0.54,"hold":0.72,"actions":[...]}`，索引从0开始。此时 beats 中的 actions 可以为空或省略。起止索引必须有序且在该页范围内，lead 非负，hold 至少0.45秒；多个组不能造成主笔事件重叠。不要给每句机械安排一幅新图。
+A complete frame spanning multiple sentences may use the page's `visual_groups`, each `{"start_beat":0,"end_beat":2,"lead":0.54,"hold":0.72,"actions":[...]}` with 0-based indices. Beats' actions may then be empty or omitted. Start/end indices must be ordered and in-page, lead non-negative, hold at least 0.45s; multiple groups must not cause master-pen events to overlap. Do not mechanically assign one new image per sentence.
 
-生产任务必须使用 `narration.source/alignment` 指定完整旁白母带和对应时间戳，字段见[连续旁白约定](continuous-narration.md)。`audio.end_hold_seconds` 只控制整篇声音结束后的画面停留；生产任务拒绝非零 `sentence_pause_seconds/page_pause_seconds`、`pace` 非1和 `trim_silence:true`。绘制窗口太短则简化画面或合并绘制窗口，不能截短呼吸、插入空白或拉慢旁白来容纳画面。封面只接受1秒，前半秒静止、后半秒渐隐，正文和旁白从1秒后开始。
+Production tasks must designate the complete narration master and matching timestamps via `narration.source/alignment`; fields: see [Continuous Narration Convention](continuous-narration.md). `audio.end_hold_seconds` controls only the frame hold after the whole piece ends; production tasks reject non-zero `sentence_pause_seconds/page_pause_seconds`, `pace` other than 1, and `trim_silence:true`. When the drawing window is too short, simplify the frame or merge drawing windows — never clip breaths, insert silence, or slow the narration to fit the art. Covers accept 1 second only: static first half-second, fading the second half, with body and narration starting after 1s.
 
-## 手、字体和字幕
+## Hands, Fonts & Subtitles
 
-六款手臂及仅画笔的 `hand.preset` 标识见 `assets/hands/catalog.json`。未选时使用模型根据内容准备的默认方案。`pen_text` 最多16个字符，这是格式上限。保留用户原文，按正常视频尺寸检查可读性；必要时调整笔杆排版，不擅自缩写广告名称。`pen_text_color` 可选。自定义手设置 `source/nib/wrist/label_segment/label_height`，提供实测锚点，源图前臂须延伸到底边；运行时自动限制最小尺度，使裁切边留在画外。新手图须同样经过美术指导和隐私清理。
+`hand.preset` identifiers for the six arms and pen-only are in `assets/hands/catalog.json`. Unselected cases use the model's content-based default. `pen_text` caps at 16 characters — a format cap. Preserve user source text, checking legibility at normal video size; adjust barrel layout when needed, never silently abbreviate ad names. `pen_text_color` optional. Custom hands set `source/nib/wrist/label_segment/label_height` with measured anchors; source art forearms must extend to the bottom edge; the runtime auto-enforces a minimum scale keeping cut edges off-frame. New hand art follows the same art-direction and privacy cleanup.
 
-`font` 为 `{"path":"/actual/font.ttc","index":2}`。字幕按[字幕与片尾设计](subtitle-design.md)由模型独立决定。`captions` 支持 `font:{path,index}/font_size/color/bottom_margin/max_width_ratio/max_lines/stroke_width/stroke_color`，`background:null` 不生成底板；可选 `background:{color,opacity}` 轻度底板；不继承顶层手写字体。优先单行，最多两行。beat 可增加 `caption_cues:[{"text":"完整短句。","start":0,"end":2.5}]`，秒数相对母带对应 beat 的开始时间；生产字幕时间写在 alignment 对应 beat 中，所有文本拼接须与 beat 文本逐字一致；不需要为字幕重新生成或切割语音。字幕作为静态排字显示，不执行主笔描写。`paper` 为十六进制颜色。默认管线适合白底或透明底的清晰线稿，不保证复杂深色背景自动分离成功。
+`font` is `{"path":"/actual/font.ttc","index":2}`. Subtitles are decided independently by the model per [Subtitle & Ending Design](subtitle-design.md). `captions` supports `font:{path,index}/font_size/color/bottom_margin/max_width_ratio/max_lines/stroke_width/stroke_color`; `background:null` generates no plate; optional `background:{color,opacity}` light plate; never inherits the top-level handwriting font. Prefer single lines, two max. Beats may add `caption_cues:[{"text":"Complete short sentence.","start":0,"end":2.5}]` in seconds relative to the master's matching beat start; production subtitle timing lives in alignment's matching beat, with all text concatenated character-identical to the beat text; no need to regenerate or cut speech for subtitles. Subtitles render as a static typeset layer with no master-pen tracing. `paper` is a hex color. The default pipeline suits clean line art on white or transparent grounds; automatic separation on complex dark backgrounds is not guaranteed.
 
-可用 `ending:{"fade_seconds":0.6}` 指定片尾渐隐到纸色；渐隐须完全位于最后一句结束后的停留区间内。`audio.end_hold_seconds` 默认0.45秒、范围0.2—0.8秒，默认不渐隐。总尾部静音不得超过1.2秒；详见[声音与收尾硬约束](audio-and-ending.md)。
+Optional `ending:{"fade_seconds":0.6}` fades to paper color; the fade must sit entirely within the hold after the final sentence. `audio.end_hold_seconds` defaults to 0.45s, range 0.2–0.8s, no fade by default. Total tail silence must not exceed 1.2s; see [Sound & Ending Hard Constraints](audio-and-ending.md).
 
-## 命令
+## Commands
 
-替换实际路径后运行：
+Substitute real paths, then run:
 
 ```bash
 python3 /path/to/skill/scripts/voice_studio.py /path/to/job --transcribe
@@ -94,28 +94,28 @@ python3 /path/to/skill/scripts/handdraw_video.py render /path/to/job
 python3 /path/to/skill/scripts/handdraw_video.py verify /path/to/job
 ```
 
-`doctor`中的 `ready` 表示已有任务输入可合成；`voice_studio.available` 单独表示新旁白服务是否可用，二者不能混用。
+In `doctor`, `ready` means existing task inputs can synthesize; `voice_studio.available` separately means the new-narration service is available — do not conflate them.
 
-先实际查看短段再导出整片。verify 完整解码并生成成片抽帧，只代表工程检查。按 [检查与返工](quality-gates.md) 填写检查证据后，才运行 `finalize`。它会拒绝未检查记录、哈希过期和运行测试夹具。
+View a short segment before exporting the whole film. verify fully decodes and samples finished-film frames — engineering checks only. Fill in review evidence per [Verification & Rework](quality-gates.md) before running `finalize`. It rejects unreviewed records, expired hashes, and runtime test fixtures.
 
-输出 `film.mp4/cover.png/captions.srt/script.txt/verification.json/verification.txt`。另存中文名时保留原件与哈希。脚本、图片、音频、设计或布局变化均需重渲染和复核。`runtime_fixture:true` 仅供包内离线测试，永远不能生成成片交付回执。
+Outputs: `film.mp4/cover.png/captions.srt/script.txt/verification.json/verification.txt`. When saving aliased Chinese filenames, keep originals and hashes. Script, image, audio, design, or layout changes all require re-render and re-review. `runtime_fixture:true` is for in-package offline tests only and must never produce a delivery receipt.
 
-## 画风与绘制计划门槛
+## Style & Drawing-Plan Gates
 
-生产任务必须完成[画风选择与可绘制约定](style-and-drawing.md)。`job.json` 增加 `drawing_plan`、`drawing_review`；每个插画 action 增加 `drawing_plan_id`，需要独立轮廓时增加 `outline_mask`。旧任务不能直接绕过新门槛。
+Production tasks must complete [Style Selection & Drawable Conventions](style-and-drawing.md). `job.json` gains `drawing_plan`, `drawing_review`; each illustration action gains `drawing_plan_id`, plus `outline_mask` when independent outlines are needed. Old tasks cannot bypass the new gates.
 
-## v1.2 可选制作设置
+## v1.2 Optional Production Settings
 
-开始时按[可选制作设置](production-options.md)收集偏好。`hand.preset` 新增 `pen-only`，只显示完整画笔，不套用前臂长度规则。`hand.pen_text` 上限为16个字符。字幕可设 `background:{"color":"#243039","opacity":0.76}` 并配白字；空背景仍可用。上述新约定替代旧示例中的20字符与固定无背景。
+Collect preferences at start per [Optional Production Settings](production-options.md). `hand.preset` gains `pen-only`, showing the full pen only without forearm-length rules. `hand.pen_text` caps at 16 characters. Subtitles may set `background:{"color":"#243039","opacity":0.76}` with white text; empty backgrounds still work. These new conventions supersede old examples' 20-character cap and fixed plateless style.
 
-`watermark:{"text":"用户原文，可换行","opacity":0.24}` 添加低对比、缓慢浮动水印；不配置或空文字不加。默认1080p约27px，可指定 `font/color/font_size`，不透明度上限0.35。固定封面静止阶段不漂移，从1秒正文开始显示，位置始终在画内并避开底部字幕。
+`watermark:{"text":"user source text, wrappable","opacity":0.24}` adds a low-contrast, slowly drifting watermark; unconfigured or empty text adds none. Default ~27px at 1080p; `font/color/font_size` settable, opacity capped at 0.35. The fixed cover static phase never drifts; display starts with the 1s body, always in-frame and clear of bottom subtitles.
 
-`ending.caption_hold_seconds` 可延长最后一句的阅读停留；必须小于或等于末句后停留减去渐隐的时间。字幕文字不变，SRT和实际画面一起延长。
+`ending.caption_hold_seconds` may extend the final sentence's reading hold; it must be ≤ the post-final-sentence hold minus fade time. Subtitle text is unchanged; SRT and actual frames extend together.
 
-## v1.3 整篇声音主时间线
+## v1.3 Whole-Piece Sound Master Timeline
 
-旧生产任务先按连续旁白约定迁移，不能仅把旧分段文件拼接后声称已解决语调断裂。`runtime_fixture:true` 保留分段合成只为离线测试，永远不能作为交付路径。
+Migrate old production tasks per the continuous-narration convention first — never splice old segmented files and claim intonation breaks solved. `runtime_fixture:true` keeps segmented synthesis for offline tests only, never as a delivery path.
 
-字幕交付使用单一烧录层。`timeline.captions` 固定为 `{"presentation":"burned","owner":"caption_events"}`；额外字幕事件、字幕轨和成片同目录的字幕文件均拒绝交付。
+Subtitle delivery uses a single burned-in layer. `timeline.captions` is fixed at `{"presentation":"burned","owner":"caption_events"}`; extra subtitle events, subtitle tracks, and same-directory subtitle files all reject delivery.
 
-v1.2.1 起简报和提示词必须非空且与绑定哈希一致。调用图像工具前运行 `python scripts/art_direction.py bind-evidence design/art-direction.json`；该命令不会把图片标记为通过。封面、正文、角色、道具、自定义手部和所有候选/编辑遵守同一流程。
+Since v1.2.1, briefs and prompts must be non-empty and hash-match their bindings. Before calling image tooling, run `python scripts/art_direction.py bind-evidence design/art-direction.json`; the command never marks images passed. Covers, body art, characters, props, custom hands, and all candidates/edits follow the same flow.

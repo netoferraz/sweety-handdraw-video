@@ -1,12 +1,12 @@
-# 六款音色的来源
+# Sources of the Six Voices
 
-目录由用户于 2026-10-13 指定收敛为六项，不扩展候选或按热度排名。
+The catalog was converged to six entries by the user on 2026-10-13; do not expand candidates or rank by popularity.
 
-- **逼真男声**：沿用《那条死于愤怒的蛇》制作时的原始录音参考；公开试听取自该成片，不能用于替换原始参考。
-- **逼真女声**：沿用《快乐囚禁你的方式》当前采用的原片提取人声。对应此前两条指定视频的共用片尾，原始录音只在本机保存。当前暂用，听感仍待调整。
-- **甜美学姐**：已有并保留的合成声音参考。
-- **Iapetus**：用户提供的 Gemini Iapetus 合成参考，由本地后端再次合成；不是直接调用 Gemini 原生音色。
-- **知性女讲师**：已有 Qwen3-TTS VoiceDesign 合成参考。
-- **故事解说**：独立保留的 VoxCPM2 合成参考，与两款成片原始参考分开。
+- **Lifelike Male**: reuses the original recording reference from producing "The Snake That Died of Anger"; the public audition is taken from that finished film and must not replace the original reference.
+- **Lifelike Female**: reuses the extracted original-film vocals currently used in "How Happiness Imprisons You". It corresponds to the shared outro of the two previously designated videos; the original recording is kept on this machine only. Currently provisional — perceived quality still needs tuning.
+- **Sweet Senior**: existing, retained synthetic voice reference.
+- **Iapetus**: user-provided Gemini Iapetus synthetic reference, re-synthesized by the local backend; not a direct call to the native Gemini voice.
+- **Intellectual Female Lecturer**: existing Qwen3-TTS VoiceDesign synthetic reference.
+- **Story Narrator**: independently kept VoxCPM2 synthetic reference, separate from both finished films' original references.
 
-前两项的试听是对应成片节选，其余四项采用相同文本试听。名称用于选择，不保证任意新稿件、模型或后端都具有相同听感。个人录音不随公共 Skill 包发布；文件与参数哈希只证明来源一致，不能代替听音。
+The first two auditions are corresponding finished-film excerpts; the other four use same-text auditions. Names serve selection only and guarantee nothing about any new script, model, or backend sounding the same. Personal recordings never ship with the public skill package; file and parameter hashes prove source consistency only and never substitute for listening.

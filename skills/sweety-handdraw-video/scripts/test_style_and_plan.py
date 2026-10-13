@@ -114,7 +114,7 @@ class StyleAndPlanTests(unittest.TestCase):
 
     def test_post_generation_review_is_bound_to_plan_crop_and_image(self):
         self.choose('inferred');plan=self.human_plan()
-        plan['narrative_requirements']=[{'id':'pose','narration_quote':'人物站立。','observable':'人物完整站立'}]
+        plan['narrative_requirements']=[{'id':'pose','narration_quote':'The figure is standing.','observable':'The figure is fully standing'}]
         plan_path=self.root/'plan.json';plan_path.write_text(json.dumps({'illustrations':[plan]}))
         preflight(self.root,plan_path)
         source=self.root/'figure.png';Image.new('RGB',(10,10),'white').save(source)
@@ -123,7 +123,7 @@ class StyleAndPlanTests(unittest.TestCase):
         review['illustrations'][0]['narrative_checks']=[{'id':'pose','status':'pass','evidence':'Fixture standing pose'}]
         (self.root/'review.json').write_text(json.dumps(review))
         action={'type':'illustration','source':'figure.png','drawing_plan_id':'figure','parts':plan['parts']}
-        manifest={'drawing_plan':'plan.json','drawing_review':'review.json','pages':[{'beats':[{'text':'人物站立。','actions':[action]}]}]}
+        manifest={'drawing_plan':'plan.json','drawing_review':'review.json','pages':[{'beats':[{'text':'The figure is standing.','actions':[action]}]}]}
         style=verify_style(self.root)
         self.assertEqual(verify_drawing_plans(self.root,manifest,style)['reviewed_illustrations'],1)
         action['crop']=[0,0,9,9]

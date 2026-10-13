@@ -18,7 +18,7 @@ class VoiceReferenceTests(unittest.TestCase):
         self.audio = self.root / 'source.wav'
         self.text = self.root / 'source.txt'
         self.audio.write_bytes(b'original recording fixture')
-        self.text.write_text('这是准确的原文。')
+        self.text.write_text('This is the exact source text.')
         self.personal = patch('voice_studio.PERSONAL_CATALOG', self.root/'personal/catalog.json')
         self.personal.start()
 
@@ -33,7 +33,7 @@ class VoiceReferenceTests(unittest.TestCase):
             voice_reference({'voice': 'bilibili-outro'}, self.root)
 
     def test_source_import_can_be_used_and_audio_changes_are_rejected(self):
-        import_reference(self.root, 'bilibili-outro', '原片女声', self.audio, self.text, 'source_recording')
+        import_reference(self.root, 'bilibili-outro', 'Original-film female voice', self.audio, self.text, 'source_recording')
         audio, text = voice_reference({'voice': 'bilibili-outro'}, self.root)
         self.assertEqual(text, self.text.read_text())
         self.assertTrue(next(item for item in load_voices(self.root) if item['id'] == 'bilibili-outro')['available'])
@@ -42,15 +42,15 @@ class VoiceReferenceTests(unittest.TestCase):
             voice_reference({'voice': 'bilibili-outro'}, self.root)
 
     def test_synthetic_import_cannot_satisfy_an_original_reference(self):
-        import_reference(self.root, 'bilibili-outro', '合成方向', self.audio, self.text, 'synthetic_direction')
+        import_reference(self.root, 'bilibili-outro', 'Synthetic direction', self.audio, self.text, 'synthetic_direction')
         self.assertFalse(next(item for item in load_voices(self.root) if item['id'] == 'bilibili-outro')['available'])
         with self.assertRaisesRegex(ValueError, 'generated previews'):
             voice_reference({'voice': 'bilibili-outro'}, self.root)
 
     def test_transcript_changes_are_rejected(self):
-        catalog = import_reference(self.root, 'calm-woman', '知性女讲师', self.audio, self.text)
+        catalog = import_reference(self.root, 'calm-woman', 'Intellectual Female Lecturer', self.audio, self.text)
         profile = json.loads(catalog.read_text())['voices'][0]
-        Path(profile['reference_text']).write_text('不同的文本。')
+        Path(profile['reference_text']).write_text('A different text.')
         with self.assertRaisesRegex(ValueError, 'transcript changed'):
             voice_reference({'voice': 'calm-woman'}, self.root)
 
@@ -58,16 +58,16 @@ class VoiceReferenceTests(unittest.TestCase):
         directory = self.root/'options'
         directory.mkdir()
         (directory/'local-voices.json').write_text(json.dumps({'default':'friendly-man','voices':[
-            {'id':'friendly-man','name':'旧男声'},
-            {'id':'bilibili-outro','name':'旧女声名','requires_original_reference':False}]}))
+            {'id':'friendly-man','name':'Legacy male voice'},
+            {'id':'bilibili-outro','name':'Legacy female voice name','requires_original_reference':False}]}))
         catalog = load_voice_catalog(self.root)
         self.assertEqual([voice['name'] for voice in catalog['voices']],
-                         ['逼真男声','逼真女声','甜美学姐','Iapetus','知性女讲师','故事解说'])
+                         ['Lifelike Male Voice','Lifelike Female Voice','Sweet Senior','Iapetus','Intellectual Female Lecturer','Story Narrator'])
         self.assertEqual(catalog['default'], 'iapetus')
         with self.assertRaisesRegex(ValueError, 'Unknown voice'):
             voice_reference({'voice':'friendly-man'}, self.root)
         with self.assertRaisesRegex(ValueError, 'six catalog voices'):
-            import_reference(self.root, 'warm-elder', '旧旁白', self.audio, self.text)
+            import_reference(self.root, 'warm-elder', 'Legacy narration', self.audio, self.text)
         self.assertTrue(next(voice for voice in catalog['voices'] if voice['id']=='bilibili-outro')['requires_original_reference'])
 
     def test_both_film_voices_keep_preview_separate_from_source_reference(self):
@@ -81,7 +81,7 @@ class VoiceReferenceTests(unittest.TestCase):
             self.assertTrue(next(voice for voice in load_voices(self.root) if voice['id']==identifier)['available'])
 
     def test_personal_default_uses_source_recording_and_job_can_override_it(self):
-        catalog = import_reference(self.root/'personal', 'bilibili-outro', '主力女声', self.audio, self.text, 'source_recording')
+        catalog = import_reference(self.root/'personal', 'bilibili-outro', 'Primary female voice', self.audio, self.text, 'source_recording')
         personal = json.loads(catalog.read_text())
         personal['default'] = 'bilibili-outro'
         personal['voices'][0]['verified_generation_parameters'] = {'mode':'combined', 'cfg_value':1.5, 'timesteps':24}

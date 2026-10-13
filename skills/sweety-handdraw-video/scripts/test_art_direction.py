@@ -11,11 +11,11 @@ class ArtDirectionTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name).resolve()
         self.image = self.root/'image.png'; self.image.write_bytes(b'accepted-image')
-        self.brief = self.root/'brief.txt'; self.brief.write_text('主体与道具接触，侧光，留出底部字幕区域。')
-        self.prompt = self.root/'prompt.txt'; self.prompt.write_text('人物双手握住道具，轮廓连续，背景留白。')
+        self.brief = self.root/'brief.txt'; self.brief.write_text('Subject touching the prop, side light, subtitle area kept at the bottom.')
+        self.prompt = self.root/'prompt.txt'; self.prompt.write_text('Both hands holding the prop, continuous silhouette, blank background.')
         self.record = self.root/'review.json'
         self.data = {'dependency_sha256':'guide-version','images':[{'source':'image.png','sha256':digest(self.image),
-                     'method':'generated_under_guidance','status':'pass','evidence':'实际查看主体、接触、构图与边缘。',
+                     'method':'generated_under_guidance','status':'pass','evidence':'Viewed the subject, contact, composition, and edges.',
                      'brief_file':'brief.txt','prompt_file':'prompt.txt'}]}
         self.record.write_text(json.dumps(self.data))
         bind_evidence(self.record)
@@ -52,7 +52,7 @@ class ArtDirectionTests(unittest.TestCase):
 
     def test_changed_preparation_requires_new_binding(self):
         for path in (self.brief,self.prompt):
-            content=path.read_text();path.write_text(content+'新修改')
+            content=path.read_text();path.write_text(content+' (modified)')
             with self.assertRaisesRegex(ValueError,'changed or was not bound'):
                 self.check()
             path.write_text(content)

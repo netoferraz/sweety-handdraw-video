@@ -9,8 +9,8 @@
       "brief_file": "briefs/navy.json",
       "prompt_file": "prompts/navy.txt",
       "evidence": "Viewed generated full arm and writing grip: five-finger structure, clear contact, continuous forearm, material-specific shading; transparent silhouette and 887x1774 source inspected. Pixel-level alignment is calibrated separately. Minor edge fringe is evaluated on the intended light paper background.",
-      "brief_sha256": "8a49ecbf83215d2acc96e801eb2d1dc322221cf5a517f909c21526f3668b4317",
-      "prompt_sha256": "d7d358731fd1b0cde6ab666940a752c3410d14114f3fdd0eef1f90e389417036"
+      "brief_sha256": "eb83b1f04c9887c8fc9cbf62cbdfb0d2f7653bfa8eda18ef82654536bddbf577",
+      "prompt_sha256": "7f96e1692b5d19bb68b37c8475c6d76858506534d867a7dd89fb139ceb247deb"
     },
     {
       "source": "diamond-woman.png",
@@ -20,8 +20,8 @@
       "brief_file": "briefs/diamond-woman.json",
       "prompt_file": "prompts/diamond-woman-r2.txt",
       "evidence": "Viewed generated full arm and writing grip: five-finger structure, clear contact, continuous forearm, material-specific shading; transparent silhouette and 887x1774 source inspected. Pixel-level alignment is calibrated separately. Minor edge fringe is evaluated on the intended light paper background.",
-      "brief_sha256": "67cc5d5d405fb429f74233f960a6e51630c43911da68e9c9bcf4bdbca96b037d",
-      "prompt_sha256": "41f3eab1af089f0248cb3f41299f7d880a59e9808f226fc86c55119c4847f28d"
+      "brief_sha256": "e64a0f687473b21f86263f94fb8b09c1774bc13407823dcd77455040e986827a",
+      "prompt_sha256": "125a542f7884dce189490ce3fea240239793321ea7c4b03333054af22f4178a6"
     },
     {
       "source": "child-pencil.png",
@@ -31,8 +31,8 @@
       "brief_file": "briefs/child-pencil.json",
       "prompt_file": "prompts/child-pencil.txt",
       "evidence": "Viewed generated full arm and writing grip: five-finger structure, clear contact, continuous forearm, material-specific shading; transparent silhouette and 887x1774 source inspected. Pixel-level alignment is calibrated separately. Minor edge fringe is evaluated on the intended light paper background.",
-      "brief_sha256": "f67cf9bace68b0669b0e2a5a0b5195c81af16f2bc2fdd00d6071ce868872d7ba",
-      "prompt_sha256": "8db13bed031248e033eb50f73f8bcf415f6f3120581ba1976d12b752f2100b52"
+      "brief_sha256": "523e913239d174a24ce869d9140b25f4111314dcb641082a6aaf7958b1906405",
+      "prompt_sha256": "2133f677d3be85f342ae18d8fedc7ca7d1e164f6bd06e44c77c0b2273dbfa2e2"
     },
     {
       "source": "waner-brush.png",
@@ -42,8 +42,8 @@
       "brief_file": "briefs/waner-brush.json",
       "prompt_file": "prompts/waner-brush.txt",
       "evidence": "Viewed generated full arm and writing grip: five-finger structure, clear contact, continuous forearm, material-specific shading; transparent silhouette and 887x1774 source inspected. Pixel-level alignment is calibrated separately. Minor edge fringe is evaluated on the intended light paper background.",
-      "brief_sha256": "8b07c0b14b6eddee8686d09b848deca94e0ed0b99766bba520d4e13cd1614403",
-      "prompt_sha256": "b8af2480865f4c29bb58858341e92e5d600745043828b2011912e180621ad115"
+      "brief_sha256": "1b7fc28b3b4ce741ea838b46f38b3570834bd5d4d915fef7db5a0b9ab04b2b96",
+      "prompt_sha256": "42a7c727de3a31aea4782f4069493b16bb3a301c8798fa87ca62010f70f038e1"
     },
     {
       "source": "teacher-pen.png",
@@ -53,8 +53,8 @@
       "brief_file": "briefs/teacher-pen.json",
       "prompt_file": "prompts/teacher-pen.txt",
       "evidence": "Viewed generated full arm and writing grip: five-finger structure, clear contact, continuous forearm, material-specific shading; transparent silhouette and 887x1774 source inspected. Pixel-level alignment is calibrated separately. Minor edge fringe is evaluated on the intended light paper background.",
-      "brief_sha256": "b667e9099510058c715955a9925264038b58321d83df46dad8d54f91b6d94bff",
-      "prompt_sha256": "4962b23458a7a9f0773718241588183443ca8d63b83538dd4015e2f6f12c1c30"
+      "brief_sha256": "f7bc496bd07c4f1c5caf7f69ee88af4b11dba33149837a76de814c7166f17439",
+      "prompt_sha256": "ef32ef82441ee6d75c6845c4c3424e7b02587f8090d75c8d26d80f1fd1637985"
     },
     {
       "source": "cardigan-fountain.png",
@@ -64,8 +64,8 @@
       "brief_file": "briefs/cardigan-fountain.json",
       "prompt_file": "prompts/cardigan-fountain-r2.txt",
       "evidence": "Viewed generated full arm and writing grip: five-finger structure, clear contact, continuous forearm, material-specific shading; transparent silhouette and 887x1774 source inspected. Pixel-level alignment is calibrated separately. Minor edge fringe is evaluated on the intended light paper background.",
-      "brief_sha256": "781d851a053ba63a1c705e7fcc655cedb7a1cdb0e0553a3ec2fae8c9204eebcb",
-      "prompt_sha256": "bc0a6dc3c29481f36510f568dccf3319a405ebb371c098003df4b6338ba00a19"
+      "brief_sha256": "88354dd419142d50935beee902fb1dd6e5eb104659f9c1744156362dd301f963",
+      "prompt_sha256": "f6167e5a6eb8b42da9d2fa1625a1d776849c5892d4d9de26463189f9d4356626"
     },
     {
       "source": "pen-only.png",

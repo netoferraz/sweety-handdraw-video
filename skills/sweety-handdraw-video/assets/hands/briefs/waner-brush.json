@@ -1,22 +1,22 @@
 {
   "id": "waner-brush",
   "type": "hand_preset",
-  "design_label": "上官婉儿灵感毛笔手",
+  "design_label": "Calligraphy Brush Hand (Wan'er-inspired)",
   "guidance": "sweety-image-art-direction",
   "reference_input": false,
   "must_preserve": [
-    "1:2透明画布",
-    "统一笔尖/手掌/手腕比例",
-    "前臂出底边",
-    "自然握笔结构",
-    "上官婉儿灵感毛笔手"
+    "1:2 transparent canvas",
+    "Unified nib/palm/wrist proportions",
+    "Forearm exits through the bottom edge",
+    "Natural pen-grip structure",
+    "Calligraphy Brush Hand (Wan'er-inspired)"
   ],
   "visible_acceptance": [
-    "实际观看尺寸下轮廓与笔尖清楚",
-    "五指和握笔接触成立",
-    "连续体积先于微纹理",
-    "透明边缘无明显底色",
-    "画布与其它五款一致"
+    "Silhouette and nib are clear at actual viewing size",
+    "Five-finger grip contact reads correctly",
+    "Continuous volume before micro-texture",
+    "Transparent edges with no visible backing color",
+    "Canvas consistent with the other five designs"
   ],
   "prompt": "work/art-directed-regeneration/prompts/waner-brush.txt",
   "status": "pass",

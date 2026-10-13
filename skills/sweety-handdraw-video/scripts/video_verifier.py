@@ -263,9 +263,9 @@ def finalize_job(job_directory):
         require(decision.get('status') == 'pass' and bool(decision.get('evidence', '').strip()), f'{category} review is incomplete or failed')
     receipt = {'status': 'delivery_review_completed', 'engineering': report, 'review': review}
     (root / 'outputs' / 'verification.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2))
-    lines = ['交付检查记录', f"视频 SHA-256：{video_hash}", f"片长：{report['duration_seconds']:.3f}秒", '工程检查：通过']
+    lines = ['Delivery inspection record', f"Video SHA-256: {video_hash}", f"Duration: {report['duration_seconds']:.3f}s", 'Engineering checks: passed']
     for category in ('content', 'visual', 'motion', 'audio', 'privacy'):
-        lines.append(f"{category}：{review[category]['evidence']}")
-    lines += ['未验证或限制：'] + (review.get('limitations') or ['未另行记录；不代表任意主题或平台均已验证。'])
+        lines.append(f"{category}: {review[category]['evidence']}")
+    lines += ['Unverified items or limitations:'] + (review.get('limitations') or ['None recorded separately; this does not mean every topic or platform has been verified.'])
     (root / 'outputs' / 'verification.txt').write_text('\n'.join(lines) + '\n')
     print(str(root / 'outputs' / 'verification.txt'))

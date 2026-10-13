@@ -25,7 +25,7 @@ class ProductionRegressions(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);Image.new('RGB',(640,360),'white').save(root/'cover.png')
             for name,seconds in [('long',3),('short',.72)]:write_test_tone(root/(name+'.wav'),seconds,220)
-            manifest={'version':1,'runtime_fixture':True,'title':'跨句绘制','canvas':{'width':640,'height':360,'fps':24},'cover':{'source':'cover.png','seconds':1},'audio':{'trim_silence':False},'pages':[{'beats':[{'id':name,'text':'完整意思。' if name=='long' else '收束。','audio':name+'.wav'} for name in ('long','short')],'visual_groups':[{'start_beat':0,'end_beat':1,'lead':.2,'hold':.6,'actions':[{'type':'text','text':'跨句画面','x':30,'y':30,'size':36}]}]}]}
+            manifest={'version':1,'runtime_fixture':True,'title':'Cross-sentence drawing','canvas':{'width':640,'height':360,'fps':24},'cover':{'source':'cover.png','seconds':1},'audio':{'trim_silence':False},'pages':[{'beats':[{'id':name,'text':'Complete thought.' if name=='long' else 'Closing line.','audio':name+'.wav'} for name in ('long','short')],'visual_groups':[{'start_beat':0,'end_beat':1,'lead':.2,'hold':.6,'actions':[{'type':'text','text':'Cross-sentence visual','x':30,'y':30,'size':36}]}]}]}
             (root/'job.json').write_text(json.dumps(manifest,ensure_ascii=False))
             timeline=FilmBuilder(root).build()
             self.assertEqual(len(timeline['pages'][0]['beats']),2)

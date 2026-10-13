@@ -85,7 +85,7 @@ def inspect_environment(job_directory):
             response.raise_for_status()
             report['voice_studio']={'available':True,'active':response.json().get('active')}
         except Exception as error:
-            report['voice_studio']={'available':False,'message':'VoiceStudio 未安装、未启动或不可达；无法生成旁白，请先安装并启动。'}
+            report['voice_studio']={'available':False,'message':'VoiceStudio is not installed, not running, or unreachable; cannot generate narration. Install and start it first.'}
     report['narration_files_available'] = all(beat.get('audio') and resolve_input(root,beat['audio']).is_file()
         for page in manifest['pages'] for beat in page['beats'])
     if manifest.get('narration'):

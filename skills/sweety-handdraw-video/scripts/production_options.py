@@ -31,9 +31,9 @@ def validate_choice(stage, value, catalog, hands, voices):
     elif stage == 'voice' and value.get('voice') not in {voice['id'] for voice in voices if voice.get('available', True)}:
         raise ValueError('This voice reference is not installed')
     elif stage == 'advertising' and (not isinstance(value.get('text'), str) or len(value['text']) > 16):
-        raise ValueError('笔杆广告最多16个字符，不能自动截短')
+        raise ValueError('Pen-bar ad text must be at most 16 characters; it is never auto-truncated')
     elif stage == 'watermark' and (not isinstance(value.get('text'), str) or len(value['text']) > 180):
-        raise ValueError('请输入不超过180个字符的水印，或留空不加')
+        raise ValueError('Enter a watermark of at most 180 characters, or leave it empty for none')
     elif stage == 'captions' and value.get('mode') not in ('quiet', 'plate'):
         raise ValueError('Unknown subtitle appearance')
 
@@ -41,7 +41,7 @@ def validate_choice(stage, value, catalog, hands, voices):
 class ChoiceSession:
     def __init__(self, job, defaults, explicit, catalog, hands, voices, timeout=60, now=None):
         if not isinstance(defaults.get('content'), str) or not defaults['content'].strip():
-            raise ValueError('MISSING_CONTENT: 请先输入主题或故事内容')
+            raise ValueError('MISSING_CONTENT: Enter a topic or story content first')
         self.job, self.defaults = Path(job), defaults
         self.catalog, self.hands, self.voices = catalog, hands, voices
         self.timeout = min(60, max(.01, float(timeout)))
@@ -152,7 +152,7 @@ def serve(job, defaults_path, explicit_path=None, port=0, timeout=60):
     job = Path(job).resolve()
     defaults = json.loads(Path(defaults_path).read_text())
     if not isinstance(defaults.get('content'), str) or not defaults['content'].strip():
-        raise ValueError('MISSING_CONTENT: 请先输入主题或故事内容')
+        raise ValueError('MISSING_CONTENT: Enter a topic or story content first')
     explicit = json.loads(Path(explicit_path).read_text()) if explicit_path else {}
     catalog_path = job/'style/catalog.json'
     catalog = json.loads(catalog_path.read_text()) if catalog_path.is_file() else prepare_catalog(job, PACKAGE/'dependencies/hand-drawn-styles')

@@ -1,41 +1,41 @@
-# 创作与分镜
+# Story & Storyboard
 
-新主题先产出 `design.json`，至少包含：
+New themes first produce `design.json` with at minimum:
 
-- `narrative_route`：模型判断默认生活问题路线是否适用，写出 decision、reason、director_review；非默认路线增加 director_plan。
-- `topic`、`audience`、`explanation_goal`：观众看完能理解或做出的具体事情。
-- `source_scope`：原创主题、用户文章、外部文章改编；来源链接和事实依据。
-- `visual_direction`：人物设定、用色理由、线条/材质、场景与镜头密度。
-- `beats`：每段口播、画面中的具体对象、动作、文字、强调位置以及与口播的对应关系。
-- `cover`：准确短标题、主视觉和与正文的一致性。
-- `asset_prompts`：生成要求、角色参考职责、是否包含文字、图像来源记录。
+- `narrative_route`: the model judges whether the default everyday-problem route applies, writing decision, reason, director_review; non-default routes add director_plan.
+- `topic`, `audience`, `explanation_goal`: concrete things viewers will understand or be able to do.
+- `source_scope`: original theme, user article, external article adaptation; source links and factual basis.
+- `visual_direction`: character setup, color rationale, line/texture, scene and shot density.
+- `beats`: per-segment voiceover, concrete on-frame objects, actions, text, emphasis placement, and correspondence with the voiceover.
+- `cover`: accurate short title, hero visual, consistency with the body.
+- `asset_prompts`: generation requirements, character-reference duties, whether text is included, image source records.
 
-这些字段记录设计判断，不是要求所有主题使用相同叙事。生活观点可以用具体困境引入；解释机制可以用对照或操作过程；故事保留人物行动与因果；文章改编不能任意删掉条件以换取戏剧性。
+These fields record design judgment — not a demand that every theme use the same narrative. Life-opinion pieces may open with a concrete dilemma; mechanism explanations may use contrasts or processes; stories keep character action and causality; article adaptations must not drop conditions for drama.
 
-## 画面如何服务讲解
+## How Visuals Serve the Explanation
 
-每幅图必须回答“它比直接显示这句话多解释了什么”。涉及成本，可以画已经消耗的东西与接下来的选择；涉及时间，可以表现同一人物的先后动作。不要仅靠人物站在纸张、灯泡、箭头旁边代表所有抽象概念。
+Every image must answer "what does this explain beyond showing the sentence directly". For costs, draw what is already spent plus the upcoming choice; for time, show the same figure's sequential actions. Do not represent every abstraction with a figure standing beside paper, light bulbs, and arrows.
 
-标题和短标签承担导航，口播承担完整论述。避免正文把整段字幕再抄一次。页面可以累积多个相关元素，待一个完整意思讲完再转场；图文位置、数量和比例应随内容变化。
+Titles and short labels navigate; the voiceover carries the complete argument. Avoid copying whole subtitle passages into body text. A page may accumulate several related elements, transitioning only after one complete idea is told; layout, count, and proportions follow the content.
 
-## 生成素材
+## Generated Assets
 
-先完成[画风选择与可绘制约定](style-and-drawing.md)，任何历史案例的画风都不作为新片默认值。
+First complete [Style Selection & Drawable Conventions](style-and-drawing.md); no historical case's style is the new film's default.
 
-每张图都先读取随包 sweety-image-art-direction 并写本图美术简报，库内模式保留手绘风格的完整配方；独立推理、自定义模式使用已记录的独立风格说明。简报、最终提示词、清理后哈希和实际查看结论一一对应。
+Every image first reads the packaged sweety-image-art-direction and writes its own art brief; catalog modes keep the hand-drawn style's complete recipe; independent-inference and custom modes use the recorded independent style specification. Briefs, final prompts, cleaned hashes, and actual-viewing verdicts correspond one-to-one.
 
-人物和道具在出图前就要考虑能否分部位独立描线。设计阶段列出部位顺序和预计笔划复杂度，不能等画完才发现无法分解。模型查看成图后标注实际部位多边形；通常上到下、左到右，例外须在设计里解释。全部轮廓完成后才填色。
+Consider part-by-part independent tracing for people and props before generation. List part order and expected stroke complexity at design time — never discover undecomposable art after drawing. The model annotates actual part polygons after viewing the finished image; typically top-to-bottom, left-to-right, with exceptions explained in the design. Fill starts only after all outlines complete.
 
-先确定一张本片的身份与画风参考，再按场景变化动作和道具。人物服装、脸型与线条保持可辨认的一致性。颜色可以围绕主题重新选，不默认复用梨黄叶绿或任何历史人物。
+First fix one identity and style reference for the film, then vary actions and props by scene. Keep costumes, face shapes, and linework recognizably consistent. Colors may be re-picked around the theme — never default to pear-yellow/leaf-green or any historical figure.
 
-插画适合干净白底或透明背景、可分辨的轮廓与局部色块。密集照片纹理、极细碎线条会放大路径数量和绘制速度问题；需要这种画风时先做代表段，不先批量生成整套。
+Illustrations suit clean white or transparent grounds, distinguishable outlines, and local color patches. Dense photographic textures and ultra-fine broken lines inflate path counts and drawing-speed problems; for such styles build a representative segment first — never batch-generate the whole set.
 
-正文可控文字由运行工具书写；封面AI只生成主视觉和留白，准确标题必须用可核对、可编辑文字图层合成。生成图片中的无用伪文字、相邻图集残片、异常肢体不能靠“渲染成功”跳过。
+Controllable body text is written by the runtime tooling; cover AI generates only hero visuals plus whitespace, with accurate titles composited in verifiable, editable text layers. Useless pseudo-text in generated images, neighboring-atlas fragments, and anomalous limbs must not be waved through on "render succeeded".
 
-## 有效的短段验证
+## Valid Short-Segment Verification
 
-选择包含完整小意思的一段，而不是仅能证明编码成功的几秒静帧。应看到标题底纹逐渐出现、文字写入、插画轮廓、至少一处颜色跟笔尖变化，以及绘制完成后的阅读停留。若固定笔手的袖子裁切边进入画面，重新设计手臂素材或镜头，不能把裁切边当正常效果。
+Pick a segment carrying one complete mini-idea — not a few seconds of stills merely proving encoding works. It should show the title texture emerging, text writing, illustration outlining, at least one nib-following color change, and a post-completion reading hold. If the fixed pen hand's sleeve cut edge enters frame, redesign the arm asset or shot — never accept cut edges as a normal effect.
 
-## 声音决定分镜时间
+## Sound Sets Storyboard Timing
 
-写完整口播稿，先生成或录制完整旁白，保留自然换气与语义停顿。语义可先规划，页面时间必须后定。以锁定母带的时间戳安排换图、描线、填色和字幕；画面复杂度超过语音窗口时合并绘制窗口或简化元素。禁止为每页重启配音、强加停顿，或为了画完图而改变讲解节奏。
+Write the complete voiceover script; generate or record the complete narration first, preserving natural breaths and semantic pauses. Semantics may be planned first, but page timing is set after. Schedule transitions, tracing, fills, and subtitles from the locked master's timestamps; when frame complexity exceeds the speech window, merge drawing windows or simplify elements. Never re-record per page, force pauses, or reshape narration rhythm to finish drawing.

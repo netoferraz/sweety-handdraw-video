@@ -32,19 +32,19 @@ class AudioContractTests(unittest.TestCase):
             with self.assertRaises(ValueError):resolve_audio_layers('.',{'audio':audio})
     def test_tail_guard_rejects_active_end_and_excess_silence(self):
         voice=(6000*np.sin(np.arange(48000)*2*np.pi*220/48000)).astype(np.int16)
-        manifest={'pages':[{'beats':[{'text':'正文。完整结语。'}]}], 'ending':{'closing_text':'完整结语。'}}
+        manifest={'pages':[{'beats':[{'text':'Body text. Complete closing.'}]}], 'ending':{'closing_text':'Complete closing.'}}
         for padding in [0,48000]:
             with self.assertRaises(ValueError):validate_ending(manifest,np.pad(voice,(0,padding)),48000)
         result=validate_ending(manifest,np.pad(voice,(0,9600)),48000)
         self.assertAlmostEqual(result['total_tail_seconds'],.65)
-        manifest['ending']['closing_text']='漏掉的订阅。'
+        manifest['ending']['closing_text']='A missing subscription.'
         with self.assertRaises(ValueError):validate_ending(manifest,np.pad(voice,(0,9600)),48000)
     def test_narrative_gate_rejects_missing_or_failed_semantic_evidence(self):
-        plan={'narrative_requirements':[{'id':'severed','narration_quote':'身体切断','observable':'三段蛇身之间有两处白色空隙'}]}
-        for review in [{},{'narrative_checks':[{'id':'severed','status':'fail','evidence':'身体仍相连'}]}]:
-            with self.assertRaises(ValueError):validate_narrative_requirements(plan,review,'身体切断。')
-        review={'narrative_checks':[{'id':'severed','status':'pass','evidence':'两处断口和白色空隙清晰可见'}]}
-        self.assertEqual(validate_narrative_requirements(plan,review,'身体切断。'),1)
-        with self.assertRaises(ValueError):validate_narrative_requirements(plan,review,'蛇在睡觉。')
+        plan={'narrative_requirements':[{'id':'severed','narration_quote':'body is severed','observable':'Two white gaps between the three snake-body segments'}]}
+        for review in [{},{'narrative_checks':[{'id':'severed','status':'fail','evidence':'The body is still connected'}]}]:
+            with self.assertRaises(ValueError):validate_narrative_requirements(plan,review,'The body is severed.')
+        review={'narrative_checks':[{'id':'severed','status':'pass','evidence':'Both breaks and the white gaps are clearly visible'}]}
+        self.assertEqual(validate_narrative_requirements(plan,review,'The body is severed.'),1)
+        with self.assertRaises(ValueError):validate_narrative_requirements(plan,review,'The snake is sleeping.')
 
 if __name__=='__main__':unittest.main()

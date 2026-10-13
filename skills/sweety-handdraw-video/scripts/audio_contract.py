@@ -30,7 +30,7 @@ def resolve_audio_layers(root, manifest):
                          'sha256': hashlib.sha256(source.read_bytes()).hexdigest()})
     return {'background_music': any(layer['kind'] == 'music' for layer in resolved),
             'layers': resolved,
-            'delivery_notice': '默认未添加背景音乐；可自行合成，或在发布平台选择配乐。' if not music else '按用户明确要求加入了背景音乐。'}
+            'delivery_notice': 'No background music added by default; mix it yourself or pick music on the publishing platform.' if not music else 'Background music added per explicit user request.'}
 
 
 def measure_voice_tail(samples, sample_rate):

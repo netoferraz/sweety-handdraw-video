@@ -1,119 +1,119 @@
-# v1.2.3 六款音色目录（2026-10-13）
+# v1.2.3 six-timbre catalog (2026-10-13)
 
-当前目录只保留逼真男声、逼真女声、甜美学姐、Iapetus、知性女讲师、故事解说。两款逼真声音的试听从已发布成片提取，生产参考仍为本机原始录音，未重新合成声音或修改成片。个人与任务目录的旧条目不能重新加入选择器，展示名与原片参考要求由主目录固定。
+The current catalog keeps only realistic male, realistic female, sweet senior, Iapetus, intellectual female lecturer, and story narrator. Previews for the two realistic voices are extracted from released finished films; production references remain the local original recordings — no voices were re-synthesized and no finished films were modified. Legacy entries in personal and task directories cannot rejoin the picker; display names and original-film reference requirements are fixed by the main catalog.
 
-新增回归验证旧条目、旧默认和旧名称不会恢复，以及两款成片试听与原始生产参考分离。当前女声仍为暂用，不能因重命名写成听感已通过。以下历史版本记录保留当时目录和检查范围。
+New regressions verify that legacy entries, legacy defaults, and legacy names do not come back, and that the two finished-film previews stay separate from the original production references. The current female voice remains provisional; it must not be written up as listening-approved because of renaming. Historical version records below keep their original catalogs and check scopes.
 
-# v1.2.2 跨平台测试修复（2026-10-13）
+# v1.2.2 cross-platform test fix (2026-10-13)
 
-仅笔模式的测试曾写死 macOS 字体路径，导致 Ubuntu CI 在字体加载处失败。现复用运行时已有的字体查找函数；Linux 使用 Noto CJK，macOS 使用可用的系统中文字体。57 项测试的断言保持不变，生产代码与 v1.2.1 相同。v1.2 和 v1.2.1 标签保持原样。
+The pen-only test had hardcoded a macOS font path, failing Ubuntu CI at font loading. It now reuses the runtime's existing font-lookup function; Linux uses Noto CJK, macOS uses available system Chinese fonts. Assertions across all 57 tests are unchanged; production code is identical to v1.2.1. The v1.2 and v1.2.1 tags stay as-is.
 
-# v1.2.1 美术指导补丁检查（2026-10-13）
+# v1.2.1 art-direction patch check (2026-10-13)
 
-指定的 `sweety-image-art-direction/SKILL.md` 与项目内置 `GUIDE.md` SHA-256 均为 `fbbfd33d70f729011b6a6bc232851c116cd4a89ead2adea4462888a6ce26fc1a`。
+The specified `sweety-image-art-direction/SKILL.md` and the project-bundled `GUIDE.md` share SHA-256 `fbbfd33d70f729011b6a6bc232851c116cd4a89ead2adea4462888a6ce26fc1a`.
 
-原规则已经覆盖每张生成图，但程序此前只检查简报与提示词文件存在。补丁增加非空与内容哈希检查，绑定命令不会生成视觉通过结论。7 项新增回归覆盖全部入片图像类型、缺少记录、图片变化、空简报/提示词、提示词变化、缺少绑定、指导版本变化、未审查以及空白审查证据。总计 57 项回归通过；离线短片合成通过。公开素材继续使用 v1.2 的固定链接。
+The rules already covered every generated picture, but the program previously only checked that brief and prompt files exist. The patch adds non-empty and content-hash checks; bound commands never produce a visual-pass verdict. 7 new regressions cover all in-film image types, missing records, changed pictures, empty briefs/prompts, changed prompts, missing bindings, direction-version changes, unreviewed output, and blank review evidence. 57 regressions passed in total; offline short-film compositing passed. Public assets keep using the fixed v1.2 links.
 
-这些检查证明资料齐全且未被替换，不能证明模型真正理解了美术指导，也不能替代实际视觉审查。v1.2 示例视频和声音保持不变。
+These checks prove materials are complete and unreplaced; they do not prove the model truly understood the art direction, nor do they replace actual visual review. The v1.2 sample videos and audio are unchanged.
 
-# v1.2 封板检查（2026-10-13）
+# v1.2 lock check (2026-10-13)
 
-- 50 项回归：字幕重复事件、重叠、额外字幕轨、相邻字幕文件、黑色描边；托管素材下载、校验、离线缓存与缓存损坏；原有绘制、声音、片尾和选项回归。
-- 五项内置依赖共 1,215 个文件核验；仅一个 Skill 入口；21 个画风预览改用 GitHub Release URL。
-- 960×540 / 24fps 的离线端到端短片合成、完整 H.264/AAC 解码与检查通过。
-- 《快乐囚禁你的方式》保留 40 条字幕，使用一套白字黑边静态字幕层。新旧 AAC 音轨 SHA-256 均为 `cfca84c3a4ab3b441f17c88e76ef341f6ccfb5f97994d57bf3369b729f969a9e`，没有重新合成声音。
-- 用户报告了重复字幕；本次复查的旧 MP4 解码帧仅见一层灰字，内嵌字幕轨和网页 `<track>` 数均为 0。同目录曾有同名 SRT，因此播放器外挂叠加是可能来源，未确认为唯一根因。已同时封堵图层、时序、编码字幕轨和同目录外挂路径。
-- 原片声音参考继续保存在作者本地。当前女声暂用，用户明确仍有听感差距；不能写成最终听感通过。
-- 公开素材不再打入代码包，首次按需下载，随后核验缓存。五张上游参考锚点有 GitHub 镜像，其中三张清理来源/模拟相机字段，逐像素一致；审计保留。
-- Netlify 团队因额度耗尽暂停；用户确认改用 GitHub。没有向 Netlify 发起部署、充值或改动站点。
+- 50 regressions: duplicate subtitle events, overlaps, extra subtitle tracks, adjacent subtitle files, black outlines; hosted-asset download, verification, offline cache, and cache corruption; existing drawing, voice, ending, and option regressions.
+- 1,215 files across five bundled dependencies verified; exactly one Skill entry; 21 style previews switched to GitHub Release URLs.
+- Offline end-to-end short-film compositing at 960×540 / 24fps, full H.264/AAC decode and checks passed.
+- "How Happiness Imprisons You" keeps 40 subtitles on a single white-with-black-outline static subtitle layer. Old and new AAC track SHA-256 are both `cfca84c3a4ab3b441f17c88e76ef341f6ccfb5f97994d57bf3369b729f969a9e`; no voices were re-synthesized.
+- A user reported duplicate subtitles; re-examined decoded frames of the old MP4 showed only one gray-text layer, with 0 embedded subtitle tracks and 0 web `<track>` elements. A same-named SRT once sat in the same directory, so external player overlay is a possible source — not confirmed as the sole root cause. Layer, timing, encoded-subtitle-track, and same-directory-external paths are all blocked now.
+- Original-film voice references stay on the author's local machine. The current female voice is provisional; the user explicitly noted a remaining perceived gap; it must not be written up as final listening approval.
+- Public assets are no longer packed into the code bundle; they download on demand on first use, then caches are verified. Five upstream reference anchors have GitHub mirrors; three had source/simulated-camera fields cleaned with pixel-identical results; audits kept.
+- Netlify hosting is paused because the team quota is exhausted; per user confirmation, GitHub is used instead. No deployment, top-up, or site change was made on Netlify.
 
-以下为历史版本记录，不代表本次已重新进行所有主观验收。
+Historical version records follow; they do not mean every subjective acceptance was redone this round.
 
-# v1.0.0 检查记录
+# v1.0.0 check record
 
-这份记录针对 v1.0.0 实现和《墨菲定律》修订片。初次公开版本编号为 v1.0.0；此前本地 v1/v2 为制作迭代，不是这个独立仓库的公开版本。
+This record covers the v1.0.0 implementation and the revised "Murphy's Law" film. The first public release was numbered v1.0.0; earlier local v1/v2 were production iterations, not public versions of this standalone repo.
 
-## 本轮发现和修复
+## Findings and fixes this round
 
-| 问题 | 原因 | 修复与验证 |
+| Issue | Cause | Fix and verification |
 |---|---|---|
-| 中文文字底部被截掉 | 图层高度按字号加固定余量，未测字体的真实下沿 | 逐字计算字形边界与左右偏移，四边保留5px；字幕复用同一测量方法。截图中的“把顺利，留给准备”“允许事情出错”与中英混排在大画布参考渲染上逐像素比较，确保没有丢失字形像素 |
-| 用户仍要安装隐私 Skill | 旧包四项内容依赖内置，隐私清理却在包外 | 增加第五项内置依赖与清理适配器；原脚本执行后再移除模拟相机字段并核验 |
-| 安装器可能发现多个 Skill | 上游目录含多个 SKILL.md 入口 | 内置指南统一为 GUIDE.md，更新引用；校验整个安装包仅一个 SKILL.md |
-| 叙事、封面、模型等上游规则可能冲突 | 直接复制多个上游流程，没有统一职责边界 | 单独维护依赖路由：内容方法按需加载，1秒封面、VoiceStudio、描线规则和本地渲染由主流程统一 |
-| 已有旁白仍被在线服务检查阻止 | doctor 混用了“新旁白可生成”和“现有任务可合成” | 分开报告服务状态和现有音频是否齐全；离线导出音频可合成，新旁白仍须 VoiceStudio |
-| VoiceStudio 地址配置不一致 | 适配器只读命令行默认地址，忽略任务设置 | 明确命令行覆盖任务设置，任务设置覆盖3900默认地址；继续仅允许本机 HTTP |
-| 重复或私有示例约束 | 入口、README、历史说明重复，含旧主题和本机路径 | 精简入口；详细规则留在对应参考文档，删除历史任务说明，去除本机来源路径 |
-| FFmpeg 6.1 混音截短 | 同一滤镜图把响度处理和混音连用，Linux 实测14.17秒画面只留下11.2秒音轨 | 分两步完成响度处理与混音，混音后再次检查时长；保持原音画时长门槛。macOS与Linux离线短片均通过 |
-| 跨句绘制时间可能越界 | 页面索引和阅读停留未先验证 | 拦截反序/越界索引、负数或非有限停顿，按扣除笔间间隙后的预算判断可绘制时间 |
+| Chinese text clipped at the bottom | Layer height added a fixed margin to font size without measuring the font's real descender | Per-glyph bounds and left/right offsets computed per character, 5px margin on all four sides; subtitles reuse the same measurement. The screenshots' "leave smoothness to preparation" and "allow things to go wrong" lines plus mixed Chinese-English lines were pixel-compared on large-canvas reference renders to ensure no glyph pixels are lost |
+| Users still had to install the privacy Skill | Four content dependencies were bundled but privacy cleanup lived outside the bundle | Added the fifth bundled dependency with a cleanup adapter; simulated camera fields are stripped and verified after the original script runs |
+| Installer could discover multiple Skills | Upstream directory held multiple SKILL.md entries | Bundled guides unified as GUIDE.md with references updated; the whole install bundle verified to hold exactly one SKILL.md |
+| Narrative, cover, model, and other upstream rules could conflict | Multiple upstream flows copied directly with no unified responsibility boundary | Separately maintained dependency routing: content methods load on demand; 1-second cover, VoiceStudio, line-drawing rules, and local rendering unified under the main flow |
+| Existing narration still blocked by an online-service check | Doctor mixed "new narration can generate" with "existing task can synthesize" | Service status and existing-audio completeness reported separately; offline exported audio can synthesize; new narration still needs VoiceStudio |
+| VoiceStudio address config inconsistent | Adapter read only the CLI default address, ignoring task settings | CLI overrides task settings, task settings override the 3900 default; still local HTTP only |
+| Duplicate or private sample constraints | Entry, README, and history notes duplicated, with old topics and local paths | Trimmed the entry; detailed rules stay in their reference docs; historical task notes and local source paths removed |
+| FFmpeg 6.1 mix truncated | One filter graph combined loudness processing and mixing; Linux test showed 14.17 s of picture keeping only 11.2 s of audio | Loudness and mixing done in two steps, duration re-checked after mixing; original audio/picture duration gates kept. Offline shorts passed on both macOS and Linux |
+| Cross-sentence draw timing could overflow | Page indexes and reading holds not validated first | Reversed/out-of-range indexes, negative or non-finite pauses intercepted; drawable time judged against budget after deducting inter-stroke gaps |
 
-## 已执行
+## Executed
 
-- Skill 结构检查通过；`npx skills add threerocks/sweety-handdraw-video --skill sweety-handdraw-video --agent codex --copy --yes` 在独立目录从远程实际安装，只安装1个Skill，安装后结构与回归通过。
-- 5项绘制回归通过：逐字隔离、完整字形、语义部位描线/填色顺序、缺失部位拦截、头发空隙中的道具归属。
-- 1214份内置依赖文件哈希检查通过，只有一个可安装入口；预设文件齐全。
-- 独立解压安装包的1274个文件与发布清单逐一匹配，包内回归再次通过。
-- 960×540、24fps、约14秒离线短片合成通过：不同音频时长、中文标点、小色块、纯线稿、完整H264/AAC解码、旧任务配置拦截与测试夹具禁止交付。
-- 《墨菲定律》87个绘制元素通过检查；最终MP4完整解码、1920×1080、30fps、3749帧、约124.965秒，音画时长一致。响度约-17.07 LUFS、峰值-5.01 dBTP。
-- 查看最终视频解码的封面、8页完成图与8页共64个绘制状态，另查开场8个状态；文字下沿完整，使用女性长甲手，笔杆文字为 `@leo_xiaolei`。
-- 24段配音与汇总旁白WAV逐字节复用，沿用逐段ASR与独立末句检查。混音兼容修复改变了最终混音，不声称最终PCM相同；AAC解码样本数保持一致，H264视频流与已完整播放检查的版本逐字节一致。
-- 新笔杆文字合成图执行内置隐私清理；嵌入元数据为空，macOS `com.apple.provenance` 残留已记录。复用的生产源图保留既有清理记录。
+- Skill structure check passed; `npx skills add threerocks/sweety-handdraw-video --skill sweety-handdraw-video --agent codex --copy --yes` installed from remote into an isolated directory with exactly 1 Skill; post-install structure and regressions passed.
+- 5 drawing regressions passed: per-character isolation, complete glyphs, semantic-region outline/fill order, missing-region interception, prop ownership inside hair gaps.
+- 1214 bundled dependency file hash checks passed, exactly one installable entry; preset files complete.
+- 1274 files of an independently unpacked install bundle matched the release manifest one by one; in-bundle regressions passed again.
+- 960×540, 24fps, ~14 s offline short-film compositing passed: varied audio durations, Chinese punctuation, small color blocks, pure line art, full H264/AAC decode, legacy task-config interception, and test fixtures barred from delivery.
+- "Murphy's Law" 87 drawing elements checked; final MP4 fully decoded, 1920×1080, 30fps, 3749 frames, ~124.965 s, audio and picture durations consistent. Loudness ~-17.07 LUFS, peak -5.01 dBTP.
+- Viewed cover, 8 finished pages, 64 draw states across 8 pages, plus 8 opening states from the final decoded video; text descenders intact, female long-nail hand used, brush text `@leo_xiaolei`.
+- 24 voiceover segments and the assembled narration WAV reused byte-for-byte, keeping per-segment ASR and the standalone closing-line check. The mix-compatibility fix changed the final mix, so final-PCM sameness is not claimed; AAC decoded sample counts match; the H264 video stream is byte-identical to the fully play-checked version.
+- New brush-text composites ran the bundled privacy cleanup; embedded metadata empty, macOS `com.apple.provenance` residue recorded. Reused production sources keep their existing cleanup records.
 
-最终视频 SHA-256：`9b688937b94c801fb47d86cddd4301ba45899556c90042a051b5f5e3d474a477`。
+Final video SHA-256: `9b688937b94c801fb47d86cddd4301ba45899556c90042a051b5f5e3d474a477`.
 
-## 验证边界
+## Verification limits
 
-本机完整流程在 macOS 执行；[Linux CI 的同一运行代码检查通过](https://github.com/threerocks/sweety-handdraw-video/actions/runs/38248732958)，包括5项回归、内置依赖完整性、14秒短片合成和打包。未验证 Windows、其他 VoiceStudio 后端或任意新题材。
+The full local flow ran on macOS; [the same run's code checks passed on Linux CI](https://github.com/threerocks/sweety-handdraw-video/actions/runs/38248732958), including 5 regressions, bundled-dependency integrity, 14-second short compositing, and packaging. Windows, other VoiceStudio backends, and arbitrary new topics were not verified.
 
-没有实际完成主观听音，音色情绪、自然度与扬声器听感未验收。ASR与音轨一致不能替代听感。连续播放状态和代表帧检查不等于人工逐帧审片；语义分区还需要模型看图判断。中文是字形路径描画，不保证规范书法笔顺。
+No actual subjective listening was done; timbre emotion, naturalness, and speaker-perceived quality were not accepted. ASR and track consistency cannot replace listening. Continuous-play state and representative-frame checks do not equal manual frame-by-frame review; semantic regions still need model viewing. Chinese is glyph-path drawing; standard calligraphic stroke order is not guaranteed.
 
 
-# v1.1.0 本地升级检查
+# v1.1.0 local upgrade check
 
-- 图文画风选择弹窗：按实际 STYLES.md 动态建目录，保存完整配方快照；本次指定安装版为19种，包内版本为21种。全部预览源图匹配上游固定哈希，缩略图随包离线提供。
-- 16项回归通过：包括四种选择路径、独立画风与库内配方隔离、自定义描述保留、旧选择拦截、人体部位完整性、先轮廓后填色、连续像素路径、共用端点仍抬笔、无轮廓拒绝与显式轮廓遮罩。
-- 14.172秒、960×540、24fps隔离测试片完整构建、渲染、解码及时间线检查通过。运行测试不能当成正式成片，finalize 仍会拒绝。
-- 实际浏览器检查19张图全部加载，编号搜索、效果图放大、自定义描述输入、空描述不能确认、保存成功后文件回读均通过。该保存发生在独立测试目录，没有替用户选择本次画风。
-- 素材按目标画框等比缩放，修复旧实现只缩小不放大的问题。
+- Text-picture style picker dialog: directories built dynamically from the actual STYLES.md, full recipe snapshots saved; the specified install build is 19 styles, the in-bundle version is 21. All preview sources match upstream pinned hashes; thumbnails ship offline with the bundle.
+- 16 regressions passed: four selection paths, standalone-style vs. in-library recipe isolation, custom-description retention, legacy-selection interception, body-part completeness, outline-before-fill, continuous pixel paths, pen lifts despite shared endpoints, no-outline rejection, and explicit outline masks.
+- 14.172 s, 960×540, 24fps isolated test film fully built, rendered, decoded, and timeline-checked. A test run is not a finished film; finalize still rejects it.
+- Real browser check of all 19 pictures loaded; number search, effect-picture zoom, custom-description input, empty description not confirmable, and post-save file read-back all passed. That save happened in an isolated test directory and did not pick this production's style for the user.
+- Assets scale proportionally to the target frame, fixing the old implementation that only shrank and never enlarged.
 
-新版本没有执行远程 CI，没有证明任意画风都能生成自然手绘动作。语义部位、遮挡和每笔意图仍须实际看图；代表段的连续动作与完整成片需分别验收。上述14秒仅为运行回归，不是新的生产样片。
+The new version ran no remote CI and proves nothing about arbitrary styles producing natural hand-drawn motion. Semantic regions, occlusion, and per-stroke intent still need actual viewing; representative-segment motion and full finished films need separate acceptance. The 14 seconds above are a run regression, not a new production sample.
 
-## v1.1.1 生产回归修复（本地，未公开发布）
+## v1.1.1 production regression fix (local, unreleased)
 
-- 部位支持 `exclude_polygons`，胸前手臂和持物可从提前绘制的躯干区域排除；回归验证其像素只由正确的后续部位显现。
-- 跨句画面的短字幕段没有独立绘制动作时，不再错误套用单句绘制预算。
-- 18 项自动回归通过。实际三片生产采用不同推理画风和手部素材；全片画面、运动和听感结论见各任务的独立审查记录，不由这些测试代替。
+- Regions support `exclude_polygons`: forearms and held objects in front of the torso can be excluded from the pre-drawn torso area; regressions verify those pixels emerge only from the correct later region.
+- Short subtitle segments in cross-sentence pictures with no standalone draw action no longer wrongly take the single-sentence draw budget.
+- 18 automated regressions passed. Three actual productions used different model-designed styles and hand assets; full-film picture, motion, and listening verdicts live in each task's own review records, not replaced by these tests.
 
-## v1.2.0 可选制作设置与字幕收束（本地，未公开发布）
+## v1.2.0 optional production settings and subtitle tightening (local, unreleased)
 
-- 六项可选设置按步骤展示：画风、手臂/仅笔、声音、笔杆广告、浮动水印、字幕。每项独立等待60秒；即使浏览器不再发请求，后端仍会保存默认方案并进入下一项。缺少主题/故事内容会明确要求补充。已选方案可恢复，同一内容不重复提问；默认不加广告与水印。
-- 真实浏览器操作验证：选择独立推理画风、仅画笔、指定B站片尾参考；点击试听播放；17字符广告拒绝且保留输入，合法文字成功保存；水印和字幕分别等待60秒后自动继续，最终文件回读确认选择。
-- 仅画笔实际合成6.38秒、1920×1080运行样例，使用完整16字符广告、漂移水印与可选字幕底板；构建、完整解码和时间线验证通过，查看正常尺寸帧，广告未截断且没有手臂。该片为测试音夹具，不冒充故事成片。
-- 七款同文试听已实际生成，并以ASR核对文案；三条故事成片共用一款，两条指定B站片尾合为一款。样音是合成输出，包内不含原B站视频录音。没有用官方音色列表冒充流行度统计，主观听感与音色相似度未验收。
-- 字幕支持独立的板正字体、无背景或明确选择的轻度底板；最后一句可延长阅读停留，并在末句之后渐隐。两条重制生产片全部54条字幕帧及正常尺寸片尾已查看，整片从0秒播放结束，1535/2902帧，播放器掉帧计数均为0。保留此前认可的第三条视频字幕背景，追加水印。
-- 原视频、校对稿与旧/新成片内容交叉检查，没有发现整句遗漏；狼片整段ASR曾漏识别APP句，已用最终音轨独立抽段转写确认存在。字幕、绘制完成时间与结束停留不能仅由“稿件齐全”推断。
-- 29项自动回归通过；独立检查59项断言通过，另有1项行为观察。HTTP边界另查24次错误令牌请求均拒绝，无连接重置。新绘图素材与叠层执行sweety-image-privacy，嵌入元数据为空；系统来源属性残留单独记录。
-- 最终安装包独立解压核对1327个文件哈希，包内29项回归再次通过；5项内置依赖、1214个依赖文件、21张画风预览及单一安装入口完整。
+- Six optional settings shown step by step: style, arm/pen-only, voice, brush ad, floating watermark, subtitles. Each waits 60 s independently; even if the browser stops sending requests, the backend still saves the default plan and moves on. Missing topic/story content is explicitly asked for. Chosen plans are restorable; the same content is never asked twice; ads and watermarks default to off.
+- Real browser-operation verification: picked a model-designed style, pen-only, and a specified Bilibili outro reference; clicked preview playback; a 17-character ad rejected with input kept, valid text saved; watermark and subtitles each auto-continued after 60 s waits; final files read back to confirm choices.
+- Pen-only actually composited a 6.38 s, 1920×1080 run sample with a full 16-character ad, drifting watermark, and optional subtitle plate; build, full decode, and timeline verification passed; normal-size frames viewed; ad unclipped with no arm. That film is a test-audio fixture, not passed off as a story production.
+- Seven same-text previews actually generated and ASR-checked against the copy; three story productions share one; two specified Bilibili outros merged into one. Sample audio is synthesized output; the bundle holds no original Bilibili video recording. No official timbre list was used to fake popularity stats; subjective listening and timbre similarity were not accepted.
+- Subtitles support a standalone upright font, no background or an explicitly chosen light plate; the last line may extend reading hold and fade after the closing line. All 54 subtitle frames and normal-size endings of two remade productions viewed; whole films played from 0 s to end; 1535/2902 frames, player drop counts all 0. A previously accepted third video's subtitle background kept, watermark added.
+- Original video, proofread script, and old/new finished films cross-checked for whole-sentence omissions; the wolf film's full-pass ASR once missed an APP sentence, confirmed present by standalone re-transcription of the final track. Subtitles, draw-completion times, and ending holds cannot be inferred from "complete script" alone.
+- 29 automated regressions passed; 59 standalone-check assertions passed plus 1 behavior observation. HTTP boundary separately checked: 24 bad-token requests all rejected, no connection resets. New drawing assets and overlays ran sweety-image-privacy with empty embedded metadata; system provenance-attribute residue recorded separately.
+- Final install bundle independently unpacked and 1327 file hashes verified; in-bundle 29 regressions passed again; 5 bundled dependencies, 1214 dependency files, 21 style previews, and the single install entry all complete.
 
-本轮未执行远程CI、Windows或其他声音后端整流程。ASR、解码和播放完成不代替主观听音与用户观感验收；上述生产片也不证明任意题材稳定。
+This round ran no remote CI, Windows, or other voice-backend end-to-end flows. ASR, decoding, and play-completion do not stand in for subjective listening and viewer acceptance; the productions above prove nothing about arbitrary topics either.
 
-## v1.3.0 整篇旁白主时间线（本地，未公开发布）
+## v1.3.0 full-narration master timeline (local, unreleased)
 
-- 36项自动回归通过：新增完整母带逐样本保留、分页不改变音轨、拒绝插空白/裁静音/变速、时间戳覆盖与哈希失效、错误音轨拦截、完整脚本一次交给TTS、既有视频时间映射顺序及封面保持。
-- 实际六页蛇故事已用完整旁白构建，28个资产通过验证，并渲染跨换图的9秒代表段；该段是流程验证，交付视频另行核对。
-- 两种TTS适配器改为完整稿件的一次请求。VoxCPM2 默认 reference 模式，避免 continuation 参考与正文开头重合导致开头跳过；生成结果必须核对，不把一次调用当作完整性保证。
-- 5项内置依赖、1214个依赖文件与21张画风预览哈希通过；此前制作选项保留。
-- 三条故事的独立文件、全文转写、逐页画面对照及声音检查保存在制作任务交付记录中。本版本未进行远程CI或其他操作系统验证；未把ASR、波形一致性或播放器播放完成当作主观听感验收。
+- 36 automated regressions passed: new full-master sample-by-sample retention, pagination not changing the track, rejection of padded silence / trimmed breaths / speed changes, timestamp coverage and hash invalidation, wrong-track interception, full script handed to TTS in one call, existing video time-map order, and cover retention.
+- An actual six-page snake story was built on full narration with 28 assets verified, and a 9-second cross-dissolve representative segment rendered; that segment is flow verification, with the delivered video checked separately.
+- Both TTS adapters now take the complete script in one request. VoxCPM2 defaults to reference mode to avoid continuation references overlapping the body-text start and skipping the opening; results must be verified — one call is never a completeness guarantee.
+- 5 bundled dependencies, 1214 dependency files, and 21 style previews hash-passed; earlier production options kept.
+- Standalone files, full transcriptions, per-page picture comparisons, and voice checks for three stories are kept in the production tasks' delivery records. This version had no remote CI or other-OS verification; ASR, waveform consistency, and player play-completion were not treated as subjective listening acceptance.
 
-## v1.4.0 本地验证
+## v1.4.0 local verification
 
-41项离线回归覆盖：默认混音不读取遗留音乐文件、无明确请求拒绝加入音乐、音效需理由及语句、完整结语须提前纳入口播、拒绝活跃结尾和过长尾部静音、出图前需要可见剧情条件、未通过剧情核对阻止构建。原有分部位描线、字幕隔离、完整旁白、选项与水印回归保留。最终音轨同时核对完整轨道及最后2秒的编码相关性；这不能代替主观听感。
+41 offline regressions cover: default mix reads no legacy music files, music refused without explicit request, effects need reasons and sentence references, complete closings must enter narration early, active endings and overlong tail silence refused, visible story conditions required before picturing, failed story checks block builds. Original region-by-region outlining, subtitle isolation, full narration, option, and watermark regressions kept. Final tracks verify both the full track and the last 2 seconds' encoding correlation; that does not replace subjective listening.
 
-本地修订蛇与快乐囚禁两片，已发布的不是你在努力保持不变。语音使用已有本地VoxCPM2与指定参考，无模型下载。未提交、推送或创建远程发布。
+Local revisions of the snake and How-Happiness-Imprisons films; the "It's Not You Trying Hard" release stays unchanged. Voices use existing local VoxCPM2 with specified references, no model downloads. Nothing submitted, pushed, or released remotely.
 
-## v1.4.1 原片女声与杂音修复（本地，未公开发布）
+## v1.4.1 original-film female voice and noise fix (local, unreleased)
 
-- 诊断发现旧指定女声使用合成试听作为新参考，而非直接使用原片录音；原片参考本身也混有持续背景成分。现改为原片人声分离、残余底噪清理、准确逐字稿 combined 条件与固定参数。
-- 运行代码拒绝使用合成试听替代要求原片的音色，绑定音频和逐字稿哈希，记录实际参考与参数；个人主力音色及原片参考独立存放于本机目录。可选离线降噪绑定本地模型哈希，不自动下载，后处理不得改变旁白长度。
-- 47项本地回归通过；原片同文与正文短样获用户确认“音色接近，杂音也消失了”，110.51秒完整旁白获确认“全篇也通过，作为主力女声”。主观验收来自用户反馈，不冒称代理自行听音。
-- 《快乐囚禁你的方式》保留原画面与文案，按新完整母带重新对齐40段旁白和字幕。最终视频工程检查与解码帧另记在制作任务。本轮没有修改蛇视频，也没有公开发布。
+- Diagnosis found the old specified female voice used a synthesized preview as the new reference instead of the original recording; the original reference itself also carried persistent background content. Now changed to original-film vocal separation, residual floor-noise cleanup, accurate verbatim-script combined conditions, and fixed parameters.
+- Run code refuses synthesized previews standing in for required original-film timbres, binds audio and verbatim-script hashes, records actual references and parameters; personal primary timbres and original-film references live separately in local directories. Optional offline denoise binds local model hashes without auto-download; post-processing must not change narration length.
+- 47 local regressions passed; the original-film same-text and body-text short samples won user confirmation ("timbre close, noise gone too"), and the 110.51-second full narration won confirmation ("full pass approved as the primary female voice"). Subjective acceptance comes from user feedback, not claimed as agent self-listening.
+- "How Happiness Imprisons You" keeps original pictures and copy, re-aligned to 40 narration/subtitle segments on the new full master. Final video engineering checks and decoded frames are recorded separately in the production task. This round changed neither the snake video nor any public release.

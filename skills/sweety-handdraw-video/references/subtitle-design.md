@@ -1,40 +1,39 @@
-# 字幕与片尾设计
+# Subtitle & Ending Design
 
-字幕用于跟上语音，不承担正文标题或画风表演。由模型依据实际画面、语速、播放尺寸和受众选择字体、字重、字号、颜色、位置与断句，并在 `design.json.subtitle_design` 写明选择理由。参考《诛仙》《仙逆》《斗罗大陆》等国漫正片字幕的克制方向；不要凭作品名称猜测其字体品牌，也不要把播放器外挂字幕当成片内字幕。
+Subtitles track speech; they do not carry body titles or style performance. The model picks font, weight, size, color, position, and phrasing from the actual frames, speech rate, playback size, and audience, recording rationale in `design.json.subtitle_design`. Reference the restrained direction of Chinese-animation main-feature subtitles such as "Zhu Xian", "Xian Ni", and "Douluo Dalu"; do not guess font brands from titles, and do not mistake player sidecar subtitles for in-film subtitles.
 
-## 默认形态
+## Default Form
 
-- 默认白字黑色细描边、无底板。背景可选；画面复杂或用户认可底板时保留深色半透明底板与浅字。以板正、清晰的常规黑体或无衬线字体为主，字体独立于正文手写字和笔身文字；不继承书法、手写或装饰字体。
-- 通常底部居中、单行短句、稳定位置；语义需要时最多两行。不逐字描写、不跳动、不做关键词变色或大幅缩放。字幕整句出现，按语音换句。
-- 本版本默认使用白字黑边；用户明确指定其他颜色时按指定设计。复杂背景可增加底板。底板用于可读性，面积、浓度与字号不要抢过正文。
-- 字号依据实际观看尺寸决定。1080p 可从约32—42px试排，但这不是强制字号；必须看正常尺寸的代表帧，兼顾不抢镜与可读性。
-- 按完整意思和停顿分句。短句显示时间不足时，优先调整相邻句的组合与时间，不能只靠缩小字号塞入长段。保留全部文字、数字与限定，不删改原口播来迁就排版。
+- Default: white text, thin black stroke, no plate. Plates optional; keep a dark translucent plate with light text when frames are busy or the user approved plates. Prefer upright, clean regular bold/gothic or sans fonts, independent of body handwriting and pen-barrel text; never inherit calligraphic, handwritten, or decorative fonts.
+- Usually bottom-centered, single short lines, stable position; two lines max when semantics require. No per-character tracing, bouncing, keyword recoloring, or large scaling. Subtitles appear whole per sentence, changing with speech.
+- This version defaults to white-on-black-edge; follow explicit user color picks when given. Busy backgrounds may add a plate. Plates serve legibility — area, density, and size must not overpower body content.
+- Size follows actual viewing size. 1080p may trial ~32–42px, but that is not a mandated size; representative frames must be viewed at normal size, balancing unobtrusiveness with legibility.
+- Split sentences by complete meaning and pauses. When a short sentence's display time is insufficient, prefer regrouping neighboring sentences and times — never just shrink type to cram long passages. Preserve all text, numbers, and qualifications; never edit source narration to fit layout.
 
-## 执行
+## Execution
 
-`captions.font` 指定实际存在的字幕字体，与顶层 `font` 分开。`background:null` 不生成底板；`background:{"color":"#243039","opacity":0.76}` 可生成深色底板并配 `color:#FFFFFF`。`font_size/color/bottom_margin/max_width_ratio/max_lines/stroke_width/stroke_color` 由模型设计后提供。默认使用常规中文字体，失败时明确指出缺失字体，不能悄悄回退到手写字。
+`captions.font` names the actually present subtitle font, separate from top-level `font`. `background:null` generates no plate; `background:{"color":"#243039","opacity":0.76}` may generate a dark plate with `color:#FFFFFF`. `font_size/color/bottom_margin/max_width_ratio/max_lines/stroke_width/stroke_color` are provided after model design. Default to a regular Chinese font; on failure, report the missing font explicitly — never quietly fall back to handwriting.
 
-一条配音可以包含多条 `caption_cues`，不必因此切割或重新生成语音。每条 cue 的 `start/end` 是相对于该 beat 的实际使用音频的秒数；按词时间或实际听音对齐，禁止只按字符比例假称精确同步。所有 cue 文本拼接后必须等于 beat 文本，时序不得重叠或越界。若调整语速或裁剪静音，重新对齐 cues。
+One voiceover beat may contain multiple `caption_cues` without cutting or regenerating speech for them. Each cue's `start/end` is seconds relative to that beat's actually used audio; align by word times or actual listening — never fake exact sync from character ratios alone. All cue texts concatenated must equal the beat text, ordered with no overlap or out-of-bounds entries. Re-align cues after rate or silence-trim changes.
 
-字幕是独立静态排字层，不属于主笔绘制事件，不伪造笔画或手部轨迹。正文标题仍按原绘制要求执行。
+Subtitles are an independent static typeset layer, not master-pen drawing events; no faked strokes or hand trajectories. Body titles still follow the original drawing requirements.
 
-## 收尾
+## Ending
 
-分别检查“文字有没有讲完”和“观众是否感到讲完”。先核对最终 MP4 的最后一句和音轨尾部，再看完成画面的停留、手部离场与旁白尾音。不能仅凭文件时长一致判定收尾合格。
+Check "did the words finish" and "does the viewer feel it finished" separately. First verify the final MP4's last sentence and track tail, then view the finished frame's hold, hand exit, and narration tail. Never judge ending quality on matching file durations alone.
 
-由模型按末句内容和节奏选择 `audio.end_hold_seconds` 与可选 `ending.fade_seconds`。先讲完、画完、留出阅读时间，再结束或轻柔渐隐；渐隐只能发生在旁白结束后，不能把尚未完成的内容遮掉。不要给所有片子机械添加相同秒数或额外口号。
+The model picks `audio.end_hold_seconds` and optional `ending.fade_seconds` by final-sentence content and rhythm. Finish speaking, finish drawing, hold for reading, then end or fade gently; fades may only occur after narration ends — never cover unfinished content. Do not mechanically add identical seconds or extra slogans to every film.
 
-## 验收
+## Acceptance
 
-看最终导出的正常尺寸画面，覆盖长短字幕、换句、最密集画面与最后数秒。检查字体是否板正、背景是否符合已选设计、正文和字幕层级是否清楚、中文边缘是否裁切、时间是否对应原声，以及片尾是否自然收住。工程检查能核对文本和时序，不能替代阅读与听感判断。
+View the final export at normal size, covering long/short subtitles, sentence transitions, the densest frames, and the last seconds. Check the font is upright, backgrounds match the chosen design, body/subtitle layering is clear, Chinese edges are unclipped, timing matches the source audio, and the ending lands naturally. Engineering checks can verify text and timing — never substitute for reading and listening judgment.
 
-必要时可设置 `ending.caption_hold_seconds`，让最后一句在旁白结束后留给阅读，必须在片尾渐隐开始前结束；不得覆盖下一句。最终画面可提前完成，使观众听结语时看到完整图，而不是直到最后一个字仍在忙于辨认绘制过程。
+Set `ending.caption_hold_seconds` when needed so the final sentence holds for reading after narration ends; it must end before any ending fade starts, never covering a next sentence. The final frame may complete early so viewers see the whole image while hearing the closing, instead of still deciphering the drawing process at the last character.
 
-收尾参数遵守[声音与收尾硬约束](audio-and-ending.md)：默认保留完成画面，母带之后0.45秒收住，末次可测发声到片末不超过1.2秒；用户指定的结语必须在完整稿阶段加入。
+Ending parameters obey [Sound & Ending Hard Constraints](audio-and-ending.md): hold the finished frame by default, closing 0.45s after the master, at most 1.2s from last measurable voicing to film end; user-specified closings must join at the complete-script stage.
 
-## 字幕唯一性是交付硬门槛
+## Subtitle Uniqueness Is a Hard Delivery Gate
 
-同一句旁白在同一时刻只允许显示一份字幕。禁止两套字幕叠加，无论来自画面烘焙、字幕事件、MP4 内嵌字幕轨、网页 `<track>` 或播放器自动加载的字幕文件。默认保留白字、黑色细描边、无底板；用户另选形态时仍执行唯一性门槛。
+The same narration sentence may show only one subtitle at any moment. No two subtitle layers may overlap, whether from baked-in frame subtitles, subtitle events, embedded MP4 subtitle tracks, page `<track>` elements, or player auto-loaded subtitle files. Default: white text, thin black stroke, no plate; the uniqueness gate still applies when the user picks another form.
 
-只从无字幕素材和独立字幕层重新合成，禁止在已有硬字幕成片上叠加第二层。构建和渲染检查 cue 与字幕事件一一对应、角色一致、无时间重叠；交付检查 MP4 无额外字幕轨、同目录无 SRT/ASS/VTT 等字幕文件。编辑字幕只放 `outputs/editing/`，预览页不加字幕轨。最终还须检查实际解码画面的长句、换句和片尾；任何双字幕直接判 FAIL，修正后才能交付。第三方播放器主动开启的自动翻译/实时字幕须单独关闭，不能把未复现的显示来源当成已查明。
-
+Re-synthesize only from subtitle-free masters plus an independent subtitle layer; never stack a second layer onto a finished film that already has hard subtitles. Build and render checks require cues to correspond one-to-one with subtitle events, with consistent roles and no time overlap; delivery checks require no extra subtitle tracks in the MP4 and no SRT/ASS/VTT subtitle files in the same directory. Edited subtitles go only in `outputs/editing/`; preview pages get no subtitle tracks. Finally, check long sentences, sentence transitions, and the ending in actual decoded frames; any double subtitles mean FAIL — fix before delivery. Auto-translate/live subtitles enabled proactively by third-party players must be switched off separately; an unreproduced display source must not be treated as identified.

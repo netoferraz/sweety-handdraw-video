@@ -20,7 +20,7 @@ class DrawingContractTests(unittest.TestCase):
         self.temporary.cleanup()
 
     def test_adjacent_characters_never_borrow_previous_glyph_strokes(self):
-        metadata=stroke_assets.build_text('text','今晚，花十分钟',85)
+        metadata=stroke_assets.build_text('text','Tonight, take ten minutes',85)
         maps=np.load(self.directory/'text.npz')
         alpha=np.array(Image.open(self.directory/'text.png'))[:,:,3]
         self.assertTrue(np.isfinite(maps['reveal'][alpha>0]).all())
@@ -34,7 +34,7 @@ class DrawingContractTests(unittest.TestCase):
 
     def test_text_keeps_complete_glyphs_including_bottoms_and_bearings(self):
         font_path,font_index=find_font({})
-        cases=[('把顺利，留给准备',84),('允许事情出错',72),('gypj，准备好了。',60)]
+        cases=[('Leave success to the prepared',84),('Allow things to go wrong',72),('gypj, all set.',60)]
         for index,(text,size) in enumerate(cases):
             font=ImageFont.truetype(font_path,size,index=font_index)
             metadata=stroke_assets.build_text('complete-'+str(index),text,size)

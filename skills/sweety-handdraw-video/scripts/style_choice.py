@@ -12,9 +12,9 @@ from PIL import Image
 
 PACKAGE = Path(__file__).resolve().parents[1]
 MODE_LABELS = {
-    'catalog_auto': '不主动选择，由模型自动匹配',
-    'inferred': '不选择列表中的，模型推理产出',
-    'custom': '自定义描述风格',
+    'catalog_auto': 'No manual choice; matched automatically by the model',
+    'inferred': 'Not from the list; produced by model inference',
+    'custom': 'Custom described style',
 }
 
 

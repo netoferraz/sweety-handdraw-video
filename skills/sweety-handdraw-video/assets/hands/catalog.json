@@ -3,7 +3,7 @@
   "presets": [
     {
       "id": "navy",
-      "name": "深蓝袖马克笔",
+      "name": "Navy-Sleeve Marker",
       "source": "navy.png",
       "nib": [
         94,
@@ -28,7 +28,7 @@
     },
     {
       "id": "diamond-woman",
-      "name": "白皙长甲镶钻女手",
+      "name": "Fair Hand with Jeweled Long Nails",
       "source": "diamond-woman.png",
       "nib": [
         103,
@@ -54,7 +54,7 @@
     },
     {
       "id": "child-pencil",
-      "name": "儿童彩铅手",
+      "name": "Child Hand with Color Pencils",
       "source": "child-pencil.png",
       "nib": [
         110,
@@ -79,7 +79,7 @@
     },
     {
       "id": "waner-brush",
-      "name": "上官婉儿灵感毛笔",
+      "name": "Calligraphy Brush Hand (Wan'er-inspired)",
       "source": "waner-brush.png",
       "nib": [
         71,
@@ -104,7 +104,7 @@
     },
     {
       "id": "teacher-pen",
-      "name": "白衬衫讲师中性笔",
+      "name": "Instructor Gel Pen (White Shirt)",
       "source": "teacher-pen.png",
       "nib": [
         109,
@@ -129,7 +129,7 @@
     },
     {
       "id": "cardigan-fountain",
-      "name": "针织袖经典钢笔",
+      "name": "Classic Fountain Pen (Knit Sleeve)",
       "source": "cardigan-fountain.png",
       "nib": [
         133,
@@ -154,7 +154,7 @@
     },
     {
       "id": "pen-only",
-      "name": "仅画笔 · 无手臂",
+      "name": "Pen Only, No Arm",
       "kind": "pen",
       "source": "pen-only.png",
       "nib": [

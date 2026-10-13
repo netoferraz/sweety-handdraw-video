@@ -22,13 +22,13 @@ class NarrationMasterTests(unittest.TestCase):
         self.samples[3 * 48000:round(3.5 * 48000)] = 0
         self.samples[round(3.5 * 48000):4 * 48000] //= 30
         save_wave(self.root/'master.wav', self.samples)
-        self.manifest = {'version': 1, 'runtime_fixture': True, 'title': '连续旁白',
+        self.manifest = {'version': 1, 'runtime_fixture': True, 'title': 'Continuous narration',
             'canvas': {'width': 640, 'height': 360, 'fps': 24},
             'cover': {'source': 'cover.png'}, 'audio': {'end_hold_seconds': 1},
             'narration': {'source': 'master.wav', 'alignment': 'alignment.json'},
             'pages': [{'beats': [{'id': name, 'text': text, 'actions':
                 [{'type': 'text', 'text': text, 'x': 30, 'y': 30, 'size': 30}]}]}
-                for name, text in [('a', '前一句。'), ('b', '后一句。')]]}
+                for name, text in [('a', 'First sentence.'), ('b', 'Second sentence.')]]}
         self.alignment = {'source_sha256': sha256(self.root/'master.wav'),
             'script_sha256': hashlib.sha256(script_text(self.manifest).encode()).hexdigest(),
             'beats': [{'id': beat['id'], 'text': beat['text'], 'start': start, 'end': end}
@@ -71,7 +71,7 @@ class NarrationMasterTests(unittest.TestCase):
                     load_master(self.root, self.manifest, self.root/'converted.wav')
 
     def test_rejects_overlaps_wrong_text_and_stale_audio(self):
-        for update in [{'start': 2.9}, {'text': '漏字。'}, {'end': 9}]:
+        for update in [{'start': 2.9}, {'text': 'Missing words.'}, {'end': 9}]:
             original = dict(self.alignment['beats'][1])
             self.alignment['beats'][1].update(update)
             self.write_inputs()
@@ -101,8 +101,8 @@ class NarrationMasterTests(unittest.TestCase):
     def test_tts_receives_complete_script_once(self):
         target, text = generation_target(self.root, self.manifest)
         self.assertEqual(target, self.root/'master.wav')
-        self.assertEqual(text, '前一句。后一句。')
-        self.manifest['ending'] = {'closing_text': '尚未加入的结语。'}
+        self.assertEqual(text, 'First sentence.Second sentence.')
+        self.manifest['ending'] = {'closing_text': 'A closing not yet joined.'}
         with self.assertRaises(ValueError):
             generation_target(self.root, self.manifest)
         self.manifest.pop('ending')

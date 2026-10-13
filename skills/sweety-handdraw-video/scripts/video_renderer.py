@@ -176,7 +176,7 @@ def mix_audio(root,timeline):
         subprocess.run(command,check=True)
     (root/'audio-mix-report.json').write_text(json.dumps({'background_music':policy.get('background_music',False),
         'layers':layers,'narration_only':not layers,'delivery_notice':policy.get('delivery_notice',
-        '默认未添加背景音乐；可自行合成，或在发布平台选择配乐。')},ensure_ascii=False,indent=2))
+        'No background music added by default; mix it yourself or pick music on the publishing platform.')},ensure_ascii=False,indent=2))
     with wave.open(str(root/'mix.wav'),'rb') as mixed_stream:
         mixed_seconds=mixed_stream.getnframes()/mixed_stream.getframerate()
     if abs(mixed_seconds-len(samples)/rate)>.01:

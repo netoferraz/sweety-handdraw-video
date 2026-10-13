@@ -30,7 +30,7 @@ def import_reference(job, identifier, name, audio, transcript, reference_kind='u
     catalog_path = Path(job).resolve()/'options/local-voices.json'
     catalog = json.loads(catalog_path.read_text()) if catalog_path.is_file() else {'voices':[]}
     catalog['voices'] = [entry for entry in catalog['voices'] if entry['id'] != identifier] + [{
-        'id':identifier,'name':name,'description':'用户指定参考音色；仅存放在当前任务',
+        'id':identifier,'name':name,'description':'User-specified reference voice; stored only in the current job',
         'reference_audio':str(copied_audio),'reference_text':str(copied_text),'source':'User-provided local reference','redistribution':'not bundled',
         'reference_kind':reference_kind,'reference_sha256':hashlib.sha256(copied_audio.read_bytes()).hexdigest(),
         'transcript_sha256':hashlib.sha256(copied_text.read_text().strip().encode()).hexdigest()}]

@@ -18,7 +18,7 @@ class CaptionAndEndingTests(unittest.TestCase):
     def test_caption_has_transparent_background_and_appears_as_complete_text(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            metadata = build_caption(root, 'subtitle', '学会放过自己。', {}, 1920, 1080)
+            metadata = build_caption(root, 'subtitle', 'Learn to forgive yourself.', {}, 1920, 1080)
             artwork = Image.open(root / 'subtitle.png').convert('RGBA')
             pixels = np.array(artwork)
             self.assertTrue((pixels[:, :, 3] == 0).any())
@@ -35,8 +35,8 @@ class CaptionAndEndingTests(unittest.TestCase):
 
     def test_single_caption_contract_rejects_duplicate_layers_and_tracks(self):
         timeline = {'captions': {'presentation': 'burned', 'owner': 'caption_events'},
-                    'assets': {'c': {'type': 'typeset_caption', 'text': '一句话。'}},
-                    'cues': [{'start': 1., 'end': 2., 'text': '一句话。'}],
+                    'assets': {'c': {'type': 'typeset_caption', 'text': 'One sentence.'}},
+                    'cues': [{'start': 1., 'end': 2., 'text': 'One sentence.'}],
                     'pages': [{'start': 1., 'end': 3., 'events': [
                         {'asset': 'c', 'caption': True, 'role': 'caption', 'start': 1., 'hide': 2.}]}]}
         self.assertEqual(validate_subtitles(timeline)['cue_count'], 1)
@@ -45,7 +45,7 @@ class CaptionAndEndingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'exactly one'):
             validate_subtitles(duplicate)
         repeated_text = copy.deepcopy(timeline)
-        repeated_text['assets']['label'] = {'type': 'text', 'text': '一句话。'}
+        repeated_text['assets']['label'] = {'type': 'text', 'text': 'One sentence.'}
         repeated_text['pages'][0]['events'].append({'asset': 'label', 'caption': False, 'role': 'title', 'y': 100})
         self.assertEqual(validate_subtitles(repeated_text)['cue_count'], 1)
         repeated_text['pages'][0]['events'][-1]['y'] = 1000
@@ -56,8 +56,8 @@ class CaptionAndEndingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'roles'):
             validate_subtitles(wrong_role)
         overlap = copy.deepcopy(timeline)
-        overlap['cues'].append({'start': 1.5, 'end': 2.5, 'text': '另一句。'})
-        overlap['assets']['d'] = {'type': 'typeset_caption', 'text': '另一句。'}
+        overlap['cues'].append({'start': 1.5, 'end': 2.5, 'text': 'Another sentence.'})
+        overlap['assets']['d'] = {'type': 'typeset_caption', 'text': 'Another sentence.'}
         overlap['pages'][0]['events'].append({'asset': 'd', 'caption': True, 'role': 'caption', 'start': 1.5, 'hide': 2.5})
         with self.assertRaisesRegex(ValueError, 'same time'):
             validate_subtitles(overlap)
@@ -73,15 +73,15 @@ class CaptionAndEndingTests(unittest.TestCase):
                     validate_subtitle_delivery(video)
 
     def test_caption_cues_reject_text_loss_and_overlapping_times(self):
-        beat = {'text': '前句。后句。', 'start': 10., 'duration': 4.,
-                'caption_cues': [{'text': '前句。', 'start': 0., 'end': 2.},
-                                 {'text': '后句。', 'start': 2., 'end': 4.}]}
+        beat = {'text': 'First half. Second half.', 'start': 10., 'duration': 4.,
+                'caption_cues': [{'text': 'First half. ', 'start': 0., 'end': 2.},
+                                 {'text': 'Second half.', 'start': 2., 'end': 4.}]}
         cues = resolve_cues(beat)
         self.assertEqual((cues[0]['start'], cues[-1]['end']), (10., 14.))
         beat['caption_cues'][1]['start'] = 1.9
         with self.assertRaises(ValueError):
             resolve_cues(beat)
-        beat['caption_cues'][1].update(start=2., text='句。')
+        beat['caption_cues'][1].update(start=2., text='half.')
         with self.assertRaises(ValueError):
             resolve_cues(beat)
 

@@ -1,14 +1,14 @@
-# 完整旁白决定画面节奏
+# Complete Narration Sets the Visual Rhythm
 
-## 不可倒置的顺序
+## Non-Invertible Order
 
-完整口播稿 → 一次生成或完整录制 → 核对文字与声音 → 锁定旁白母带 → 逐句/逐词时间戳 → 画面与字幕 → 混音编码 → 最终音轨复核。
+Complete voiceover script → single-pass generation or complete recording → text and audio verification → locked narration master → per-sentence/per-word timestamps → visuals and subtitles → mix and encode → final-track review.
 
-页面、字幕短句、绘制动作只是声音上的标记，不是音频剪切单位。保留换气、强调、转折和收束，不把“连续”理解成没有任何停顿。禁止为了画完图给音轨补空白、截短呼吸或扭曲语速。
+Pages, subtitle phrases, and drawing actions are only markers on the sound, not audio cut units. Preserve breaths, emphasis, turns, and closings — do not read "continuous" as having no pauses at all. Never pad the track with silence to finish drawing, clip breaths, or warp speech rate.
 
-优先整篇一次合成。全文生成不稳定或模型能力确实不允许长篇时，先在声音制作阶段按语义录制或合成有前后文的段落，完成连贯性编辑和核对，导出完整母带；这属于明确记录的声音编辑方式，不能宣称一次生成，也不能按页分段。模型截断、漏词、重复时返工声音，不自动交付。
+Prefer single-pass synthesis of the whole text. When full-text generation is unstable or the model genuinely cannot handle long form, record or synthesize contextualized passages by semantic units during sound production, complete continuity editing and verification, and export a complete master; this is an explicitly recorded sound-editing path — never claim single-pass generation, and never segment per page. Rework the audio on model truncation, dropped words, or repetitions; never auto-deliver.
 
-## 任务输入
+## Task Input
 
 ```json
 {
@@ -20,43 +20,43 @@
 }
 ```
 
-母带从正文开始，不包含固定1秒封面。保存完整 WAV；仅在锁定前允许整条声音首尾数毫秒去爆音、整体响度调整或经过核对的声音编辑。局部修复必须选择实际波形中的自然句间低能量区，不能只靠ASR时间戳下刀；保留辅音起音、句尾与换气，必要时只在低能量区作数毫秒平滑，记录真实编辑次数。禁止在每句/每页做边缘淡入淡出。正文内部样本保持完整。
+The master starts at the body text and excludes the fixed 1-second cover. Save a complete WAV; before locking, only whole-track head/tail de-clicking of a few milliseconds, overall loudness adjustment, or verified sound edits are allowed. Local fixes must pick natural low-energy inter-sentence zones in the actual waveform — never cut by ASR timestamps alone; preserve consonant onsets, sentence endings, and breaths, smoothing only a few milliseconds in low-energy zones when needed, and record the true edit count. No per-sentence/per-page edge fades. Body samples stay intact.
 
-`alignment.json` 中秒数相对母带起点：
+Seconds in `alignment.json` are relative to the master start:
 
 ```json
 {
   "version": 1,
-  "source_sha256": "实际母带文件的SHA-256",
-  "script_sha256": "按页和beat原顺序拼接所有text的UTF-8 SHA-256",
+  "source_sha256": "SHA-256 of the actual master file",
+  "script_sha256": "UTF-8 SHA-256 of all text concatenated in page and beat order",
   "beats": [
     {
       "id": "opening",
-      "text": "与音频逐字对应的讲解。",
+      "text": "Narration matching the audio character-for-character.",
       "start": 0.12,
       "end": 3.86,
       "caption_cues": [
-        {"text": "与音频逐字对应的讲解。", "start": 0, "end": 3.74}
+        {"text": "Narration matching the audio character-for-character.", "start": 0, "end": 3.74}
       ]
     }
   ]
 }
 ```
 
-beats 必须完整、顺序一致、文本一致、互不重叠，位于母带内。标记可以间隔，间隔中的自然声音照常播放。caption_cues 相对该 beat 起点，文本拼接必须与 beat 一致；没有细分时显示完整 beat 字幕。用实际 ASR/对齐工具取得时间戳，结合原文核对；不能靠字符数平均分配假装实际时间。换图跟随下一页首句起点，当前页跨换气保持显示。
+Beats must be complete, in order, text-identical, non-overlapping, and within the master. Marks may have gaps; natural sound in gaps keeps playing. caption_cues are relative to that beat's start, and their concatenated text must equal the beat text; without subdivision, show the full beat subtitle. Obtain timestamps with real ASR/alignment tooling and verify against the source text; never fake real timing by averaging over character counts. Image transitions follow the next page's first-sentence start; the current page holds across breaths.
 
-## 执行和验证
+## Execution and Verification
 
-1. 既有选项保持，不再询问声音或画风。两个本地配音适配器均接收整篇脚本一次，生成完整 master；不再循环生成 beats。
-2. 用实际转写核对全文、疑似错词、句尾和截断；取得时间戳并写上述 alignment。
-3. `doctor/build/render/verify` 验证母带输入、完整内容及哈希。`build` 在完整母带前加1秒封面静音、末尾加选定停留，主体样本不切割、不重排。
-4. 改换图点只能改视觉编排；需要新节奏时先修改并核对声音，再重建时间戳和画面。不要同时修改两个主时间线。
-5. 混音和编码后核对完整音轨。单独记录主观听感是否验收；波形连续、ASR覆盖和码流正常不能替代听感。
+1. Keep existing options; do not re-ask about voice or art style. Both local voice adapters accept the entire script in one request and generate a complete master; no more per-beat generation loops.
+2. Verify the full text, suspected misreadings, sentence endings, and truncation with actual transcription; obtain timestamps and write the alignment above.
+3. `doctor/build/render/verify` validate master input, complete content, and hashes. `build` prepends 1 second of cover silence and appends the selected hold to the complete master; body samples are never cut or reordered.
+4. Changing transition points only changes visual layout; when a new rhythm is needed, revise and re-verify the audio first, then rebuild timestamps and visuals. Never modify both master timelines at once.
+5. Re-verify the complete track after mixing and encoding. Record subjective listening acceptance separately; waveform continuity, ASR coverage, and healthy streams never substitute for listening.
 
-## 已有成片只修声音
+## Existing Finished Film: Sound-Only Fix
 
-若用户要求画面、字幕、水印保持：复用获认可的视频帧，仅按旧字幕边界到新语音边界的单调映射改变呈现时间，根据声音与收尾硬约束重新检查片尾停留，不沿用过长或截音的旧片尾；无需重新生图。字幕文字、换行、字体和水印保留，时间跟随声音。视频需要重新编码，因此只能声称内容和设计保留，不能声称编码像素逐字节相同。记录原片与新版哈希、时间映射、整篇声音生成方式，并抽查对应帧及所有换图边界。
+When the user requires visuals, subtitles, and watermarks to stay: reuse approved video frames, only remapping presentation times via a monotonic mapping from old subtitle boundaries to new speech boundaries, and re-check the ending hold per the sound & ending hard constraints — never carry over an overlong or clipped old ending; no image regeneration needed. Subtitle text, line breaks, fonts, and watermarks stay; timing follows the sound. The video must be re-encoded, so only content and design retention may be claimed — never byte-identical encoded pixels. Record source and new hashes, the time mapping, the whole-piece sound generation method, and spot-check corresponding frames plus all transition boundaries.
 
-旧任务中的 `beat.audio` 不能继续作为生产音轨。删除非零页面/句子停顿，关闭 trim，pace 保持1，加入 narration 和 alignment。测试夹具可保留旧分段接口用于回归测试，但 finalize 始终拒绝测试夹具。
+Legacy `beat.audio` in old tasks must not continue as production tracks. Remove non-zero page/sentence pauses, switch trim off, keep pace at 1, and add narration plus alignment. Test fixtures may keep the old segmented interface for regression tests, but finalize always rejects test fixtures.
 
-配乐与末字保护按[声音与收尾硬约束](audio-and-ending.md)执行，默认旁白直出，成片末尾静音不超过1.2秒。
+Background music and final-character protection follow [Sound & Ending Hard Constraints](audio-and-ending.md): narration-only output by default, with at most 1.2s of silence at the end of the finished film.
